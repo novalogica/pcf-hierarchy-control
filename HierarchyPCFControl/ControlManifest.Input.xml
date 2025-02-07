@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<manifest>
+  <control namespace="nl" constructor="HierarchyPCFControl" version="0.0.1" display-name-key="HierarchyPCFControl" description-key="HierarchyPCFControl description" control-type="standard" >
+    <property name="column" display-name-key="Column to be Attached" description-key="" of-type="Multiple" usage="bound" required="false" />
+    <resources>
+      <code path="index.ts" order="1"/>
+      <css path="styles/style.css" order="1" />
+    </resources>
+    <feature-usage>
+      <uses-feature name="Utility" required="true" />
+      <uses-feature name="WebAPI" required="true" />
+    </feature-usage>
+    <external-service-usage enabled="false">
+    </external-service-usage>
+  </control>
+</manifest>
