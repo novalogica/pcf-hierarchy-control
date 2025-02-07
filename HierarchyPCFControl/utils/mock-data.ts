@@ -1,46 +1,45 @@
 import { type Node, type Edge } from '@xyflow/react';
 
-const initialNodes: Node[] = [
-    {
-      id: "1",
-      position: { x: 0, y: 0 },
-      data: { label: "Product Marketing" },
-      type: 'card'
-    },
-    {
-      id: "2",
-      position: { x: 0, y: 150 },
-      data: { label: "Advertising" },
-      type: 'card'
-    },
-    {
-      id: "3a",
-      position: { x: 0, y: 300 },
-      data: { label: "Amazon Advertising" },
-      type: 'card'
-    },
-    {
-      id: "3b",
-      position: { x: 0, y: 450 },
-      data: { label: "Google Advertising" },
-      type: 'card'
-    },
-    {
-      id: "4b",
-      position: { x: 0, y: 450 },
-      data: { label: "Google Advertising 2" },
-      type: 'card'
-    },
-];
+const generateNodesAndEdges = (levels: number, childrenPerNode: number) => {
+  const initialNodes: Node[] = [];
+  const initialEdges: Edge[] = [];
+  let idCounter = 1;
+  let previousLevelIds = [];
+  
+  const rootNode = { id: "1", position: { x: 0, y: 0 }, data: { label: "Root" }, type: 'card' };
 
-const initialEdges: Edge[] = [
-    { id: "e1-2", source: "1", target: "2", animated: true, type: 'smoothstep' },
-    { id: "e1-3", source: "2", target: "3a", animated: true, type: 'smoothstep' },
-    { id: "e1-4", source: "2", target: "3b", animated: true, type: 'smoothstep' },
-    { id: "e1-5", source: "3b", target: "4b", animated: true, type: 'smoothstep' },
-]
+  initialNodes.push(rootNode);
+  previousLevelIds.push("1");
+  idCounter++;
+
+  for (let level = 1; level <= levels; level++) {
+      const currentLevelIds: string[] = [];
+      const yPos = level * 150;
+
+      previousLevelIds.forEach(parentId => {
+          for (let i = 0; i < childrenPerNode; i++) {
+              const newId = idCounter.toString();
+              const node = {
+                  id: newId,
+                  position: { x: 0, y: 0 },
+                  data: { label: `Node ${newId}` },
+                  type: 'card'
+              };
+              initialNodes.push(node);
+              initialEdges.push({ id: `e${parentId}-${newId}`, source: parentId, target: newId, animated: true, type: 'smoothstep' });
+              currentLevelIds.push(newId);
+              idCounter++;
+          }
+      });
+
+      previousLevelIds = currentLevelIds;
+  }
+  return { initialNodes, initialEdges };
+}
+
+const { initialNodes, initialEdges } = generateNodesAndEdges(5, 2)
 
 export {
-    initialNodes,
+    initialNodes ,
     initialEdges
 }

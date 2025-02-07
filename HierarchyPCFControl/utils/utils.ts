@@ -2,9 +2,11 @@ import { graphlib, layout } from "@dagrejs/dagre";
 import { type Node, type Edge, Position } from '@xyflow/react';
 
 export const nodeWidth = 350;
-export const nodeHeight = 200;
+export const nodeHeight = 300;
 
 export const getLayoutedElements = (graph: graphlib.Graph, nodes: Node[], edges: Edge[]): { positionedNodes: Node[], positionedEdges: Edge[]} => {
+    graph.setGraph({ rankdir: 'TB' });
+
     nodes.forEach(node => {
         graph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
     });
