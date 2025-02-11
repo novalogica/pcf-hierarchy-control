@@ -6,7 +6,7 @@ import NodeTree from "./tree";
 const SidePanel = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   
-  const panelWidth = useMemo(() => isCollapsed ? 50 : 'auto', [isCollapsed])
+  const panelWidth = useMemo(() => isCollapsed ? 50 : '275px', [isCollapsed])
   const menuIcon = useMemo(() => isCollapsed ? "OpenPaneMirrored": "OpenPane", [isCollapsed])
   
   return (
