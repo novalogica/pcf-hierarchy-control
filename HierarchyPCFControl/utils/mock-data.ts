@@ -1,6 +1,5 @@
 import { type Node, type Edge } from '@xyflow/react';
 
-<<<<<<< HEAD
 const initialNodes: Node[] = [
     {
       id: "1",
