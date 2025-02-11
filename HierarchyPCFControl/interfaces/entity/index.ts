@@ -1,11 +1,15 @@
+import { Column } from "./column";
 import { EntityDescriptor } from "./descriptor";
-import { EntityMetada } from "./metadata";
+import { Form } from "./form";
+import { EntityMetadata } from "./metadata";
 import { EntityRelationship } from "./relationship";
 import { RelationshipInfo } from "./relationship-info";
 
 export {
-    EntityMetada,
+    EntityMetadata,
     EntityDescriptor,
     EntityRelationship,
-    RelationshipInfo
+    RelationshipInfo,
+    Column,
+    Form
 }

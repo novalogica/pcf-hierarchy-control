@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
@@ -13,7 +14,14 @@ export class HierarchyPCFControl implements ComponentFramework.StandardControl<I
     }
 
     private renderControl(context: ComponentFramework.Context<IInputs>) {
-        ReactDOM.render(React.createElement(App, { context }), this.container );
+        const contextInfo = (context.mode as any).contextInfo;
+        const params = (context.mode as any).fullPageParam;
+        
+        ReactDOM.render(React.createElement(App, { 
+            context,
+            entityName: contextInfo?.entityTypeName ?? params.etn,
+            id: contextInfo?.id ?? params.id
+        }), this.container );
     }
 
     public updateView(context: ComponentFramework.Context<IInputs>): void {

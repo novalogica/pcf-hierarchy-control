@@ -1,5 +1,5 @@
 import { EntityDescriptor } from "./descriptor";
 
-export interface EntityMetada {
+export interface EntityMetadata {
     _entityDescriptor: EntityDescriptor
 }

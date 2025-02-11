@@ -1,24 +1,19 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
 import { IInputs } from "./generated/ManifestTypes";
 import Flow from "./components/flow/flow";
-import { Edge, ReactFlowProvider, Node } from "@xyflow/react";
+import { ReactFlowProvider } from "@xyflow/react";
 import '@xyflow/react/dist/style.css';
 import { ControlContext } from "./context/control-context";
-import { initialEdges, initialNodes } from "./utils/mock-data";
+import { useDataverse } from "./hooks/useDataverse";
 
-const App = ({ context }: { context: ComponentFramework.Context<IInputs> }) => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [nodes, setNodes] = useState<Node[]>([]);
-    const [edges, setEdges] = useState<Edge[]>([]);
+interface IProps {
+    context: ComponentFramework.Context<IInputs>,
+    entityName?: string,
+    id?: string
+}
 
-    useEffect(() => {
-        setTimeout(() => {
-            setNodes(initialNodes);
-            setEdges(initialEdges);
-            setIsLoading(false);
-        }, 750);
-    }, [])
+const App = ({ context, entityName, id }: IProps) => {
+    const { nodes, edges, isLoading, error } = useDataverse(context, entityName, id);
     
     return (
         <ControlContext.Provider value={{context}}>
