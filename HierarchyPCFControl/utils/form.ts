@@ -1,4 +1,4 @@
-import { Column, EntityMetadata, RelationshipInfo } from "../interfaces/entity";
+import { Column, EntityMetadata, Form, RelationshipInfo } from "../interfaces/entity";
 import EntityDefinition from "../interfaces/entity/definition";
 
 export const extractColumns = (
@@ -71,3 +71,12 @@ export const extractColumns = (
 
   return columns;
 };
+
+export const generateColumns = (forms: Form[]): Column[] => {
+  const uniqueColumns = forms.reduce((acc, form) => {
+    form.columns.forEach(column => acc.set(column.logicalName, column));
+    return acc;
+  }, new Map<string, Column>());
+
+  return Array.from(uniqueColumns.values())
+}

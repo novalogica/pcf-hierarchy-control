@@ -2,11 +2,11 @@ import { useMemo, useState, useEffect } from "react";
 import { IInputs } from "../generated/ManifestTypes"
 import EntityDefinition from "../interfaces/entity/definition";
 import { XrmService } from "./service";
-import { EntityMetadata, Form, RelationshipInfo } from "../interfaces/entity";
+import { Column, EntityMetadata, Form, RelationshipInfo } from "../interfaces/entity";
 import { Node } from "@xyflow/react/dist/esm/types/nodes";
 import { Edge } from "@xyflow/react/dist/esm/types/edges";
-import { initialEdges, initialNodes } from "../utils/mock-data";
-import { extractColumns } from "../utils/form";
+import { initialEdges, initialNodes, transformEntityToNodes } from "../utils/transform";
+import { extractColumns, generateColumns } from "../utils/form";
 
 export const useDataverse = (context: ComponentFramework.Context<IInputs>, entityName?: string, id?: string) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -14,8 +14,8 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
     const [nodes, setNodes] = useState<Node[]>([]);
     const [edges, setEdges] = useState<Edge[]>([]);
     const [forms, setForms] = useState<Form[]>([]);
+    const [columns, setColumns] = useState<Column[]>([]);
     const [activeForm, setActiveForm] = useState<Form | undefined>(undefined);
-    const [metadata, setMetadata] = useState<EntityMetadata | null>(null);
     const [relationship, setRelationship] = useState<RelationshipInfo | null>(null);
     const [attributes, setAttributes] = useState<EntityDefinition[] | null>(null);
 
@@ -34,29 +34,27 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
             setAttributes(attributes);
 
             const [metadata, relationship] = await fetchEntityMetadata();
-            setMetadata(metadata);
             setRelationship(relationship);
 
-            const forms = await fetchQuickViewForms(relationship!, attributes, metadata);
-            setForms(forms);
-
+            const forms = await fetchQuickViewForms(relationship, attributes, metadata);
             const activeForm = forms.find((f) => f.isActive == true);
+            setForms(forms);
             setActiveForm(activeForm);
+
+            if(!activeForm)
+                return;
+
+            const columns = generateColumns(forms);
+            setColumns(columns);
+
+            const nodes = await fetchHierarchy(relationship, columns)
+            console.log(nodes);
         } catch (e: unknown) {
             setError(e);
         } finally {
             setIsLoading(false);
         }
     }
-
-    useMemo(() => {
-        const columns = activeForm?.columns.map((c) => c.logicalName).join(",");
-
-        if(!columns)
-            throw new Error("Form does not contain any column.");
-
-        fetchHierarchy(columns);
-    }, [activeForm])
 
     const fetchAttributes = async (): Promise <EntityDefinition[]> => {
         const query = `api/data/v9.1/EntityDefinitions(LogicalName='${entityName}')/Attributes?$select=LogicalName,AttributeType,DisplayName&$filter=AttributeOf eq null&$orderby=DisplayName asc`;
@@ -82,7 +80,7 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
         return forms;
     }
 
-    const fetchEntityMetadata = async (): Promise<[EntityMetadata, RelationshipInfo | null]> => {
+    const fetchEntityMetadata = async (): Promise<[EntityMetadata, RelationshipInfo]> => {
         const metadata = await context.utils.getEntityMetadata(entityName!) as EntityMetadata;
 
         const hierarchicalRelationship = Object.values(metadata._entityDescriptor.OneToManyRelationships)
@@ -94,10 +92,8 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
         return [metadata, hierarchicalRelationship ?? null];
     }
 
-    const fetchHierarchy = async (columns: string): Promise<ComponentFramework.WebApi.Entity> => {
-        if(!relationship)
-            return [];
-
+    const fetchHierarchy = async (relationship: RelationshipInfo, columnList: Column[]): Promise<ComponentFramework.WebApi.Entity[]> => {
+        const columns = columnList.map((c) => c.logicalName).join(",");
         const { ReferencedAttribute, ReferencingAttribute } = relationship;
 
         const parentResult = await context.webAPI.retrieveMultipleRecords(
@@ -109,18 +105,19 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
 
         const result = await context.webAPI.retrieveMultipleRecords(
             entityName!,
-            `?$filter=Microsoft.Dynamics.CRM.UnderOrEqual(PropertyName='${ReferencedAttribute}',PropertyValue='${topParent[ReferencedAttribute]}')&$select=${attributes}`
+            `?$filter=Microsoft.Dynamics.CRM.UnderOrEqual(PropertyName='${ReferencedAttribute}',PropertyValue='${topParent[ReferencedAttribute]}')&$select=${columns}`
         );
 
-        const nodes = [topParent, ...result.entities];
-        console.log(nodes);
-        return nodes;
+        return transformEntityToNodes([topParent, ...result.entities]);
     }
 
     return {
+        isLoading,
+        error,
         nodes,
         edges,
-        isLoading,
-        error
+        forms,
+        activeForm,
+        setActiveForm
     }
 }
