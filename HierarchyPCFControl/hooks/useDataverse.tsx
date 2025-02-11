@@ -14,6 +14,7 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
     const [nodes, setNodes] = useState<Node[]>([]);
     const [edges, setEdges] = useState<Edge[]>([]);
     const [forms, setForms] = useState<Form[]>([]);
+    const [activeForm, setActiveForm] = useState<Form | undefined>(undefined);
     const [metadata, setMetadata] = useState<EntityMetadata | null>(null);
     const [relationship, setRelationship] = useState<RelationshipInfo | null>(null);
     const [attributes, setAttributes] = useState<EntityDefinition[] | null>(null);
@@ -32,22 +33,30 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
             const attributes = await fetchAttributes();
             setAttributes(attributes);
 
-            const [metadata, relationship] = await fetchEntityMetadata(["name", "accountid"]);
+            const [metadata, relationship] = await fetchEntityMetadata();
             setMetadata(metadata);
             setRelationship(relationship);
 
             const forms = await fetchQuickViewForms(relationship!, attributes, metadata);
             setForms(forms);
 
-            const topParent = await fetchTopParent("accountid", "parentaccountid", "name");
-            const children = await fetchAllChildren("accountid", "name", topParent["accountid"]);
-
+            const activeForm = forms.find((f) => f.isActive == true);
+            setActiveForm(activeForm);
         } catch (e: unknown) {
             setError(e);
         } finally {
             setIsLoading(false);
         }
     }
+
+    useMemo(() => {
+        const columns = activeForm?.columns.map((c) => c.logicalName).join(",");
+
+        if(!columns)
+            throw new Error("Form does not contain any column.");
+
+        fetchHierarchy(columns);
+    }, [activeForm])
 
     const fetchAttributes = async (): Promise <EntityDefinition[]> => {
         const query = `api/data/v9.1/EntityDefinitions(LogicalName='${entityName}')/Attributes?$select=LogicalName,AttributeType,DisplayName&$filter=AttributeOf eq null&$orderby=DisplayName asc`;
@@ -73,8 +82,8 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
         return forms;
     }
 
-    const fetchEntityMetadata = async (attributes?: string[]): Promise<[EntityMetadata, RelationshipInfo | null]> => {
-        const metadata = await context.utils.getEntityMetadata(entityName!, attributes) as EntityMetadata;
+    const fetchEntityMetadata = async (): Promise<[EntityMetadata, RelationshipInfo | null]> => {
+        const metadata = await context.utils.getEntityMetadata(entityName!) as EntityMetadata;
 
         const hierarchicalRelationship = Object.values(metadata._entityDescriptor.OneToManyRelationships)
                 .find((rel) => rel.IsHierarchical);
@@ -85,22 +94,27 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
         return [metadata, hierarchicalRelationship ?? null];
     }
 
-    const fetchTopParent = async (referencedAttribute: string, referencingAttribute: string, attributes: string): Promise<ComponentFramework.WebApi.Entity> => {
-        const result = await context.webAPI.retrieveMultipleRecords(
+    const fetchHierarchy = async (columns: string): Promise<ComponentFramework.WebApi.Entity> => {
+        if(!relationship)
+            return [];
+
+        const { ReferencedAttribute, ReferencingAttribute } = relationship;
+
+        const parentResult = await context.webAPI.retrieveMultipleRecords(
             entityName!,
-            `?$filter=(Microsoft.Dynamics.CRM.Above(PropertyName='${referencedAttribute}',PropertyValue='${id}') and _${referencingAttribute}_value eq null)&$select=${attributes}`
+            `?$filter=(Microsoft.Dynamics.CRM.Above(PropertyName='${ReferencedAttribute}',PropertyValue='${id}') and _${ReferencingAttribute}_value eq null)&$select=${columns}`
         );
 
-        return result.entities[0];
-    }
+        const topParent = parentResult.entities[0];
 
-    const fetchAllChildren = async (primaryAttributeName: string, attributes: string, parentId: string): Promise<ComponentFramework.WebApi.Entity[]> => {
         const result = await context.webAPI.retrieveMultipleRecords(
             entityName!,
-            `?$filter=Microsoft.Dynamics.CRM.UnderOrEqual(PropertyName='${primaryAttributeName}',PropertyValue='${parentId}')&$select=${attributes}`
+            `?$filter=Microsoft.Dynamics.CRM.UnderOrEqual(PropertyName='${ReferencedAttribute}',PropertyValue='${topParent[ReferencedAttribute]}')&$select=${attributes}`
         );
 
-        return result.entities;
+        const nodes = [topParent, ...result.entities];
+        console.log(nodes);
+        return nodes;
     }
 
     return {
