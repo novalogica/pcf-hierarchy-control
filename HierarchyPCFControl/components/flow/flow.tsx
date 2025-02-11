@@ -30,7 +30,7 @@ const Flow = () => {
 
     return (
         <FlowContext.Provider value={{nodes, edges, selectedPath, moveToNode, onExpandNode, getChildrenIds}}>
-            <div style={styles.main}>
+            <div style={styles.main} className="flow-container">
                 <ReactFlow
                     nodes={nodeList}
                     edges={edgeList}
@@ -54,6 +54,6 @@ export default Flow;
 const styles: Record<string, React.CSSProperties> = {
     main: {
         width: "100%",
-        height: "100%",
+        height: "100vh",
     },
 };
