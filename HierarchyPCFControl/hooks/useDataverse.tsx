@@ -4,11 +4,7 @@ import EntityDefinition from "../interfaces/entity/definition";
 import { XrmService } from "./service";
 
 export const useDataverse = (context: ComponentFramework.Context<IInputs>, entityName: string, id: string) => {
-    const xrmService = useMemo(() => {
-        const service = XrmService.getInstance();
-        service.setContext(context);
-        return service;
-    }, [context]);
+    const xrmService = useMemo(() => XrmService.getInstance(), [context]);
     
     const fetchAttributes = async (): Promise <EntityDefinition[]> => {
         const result = await xrmService.fetch(

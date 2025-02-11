@@ -3,7 +3,6 @@ import { XrmRequest, XrmResponse } from "../interfaces/xrm";
 
 export class XrmService {
     private static instance: XrmService | null = null;
-    private context: ComponentFramework.Context<IInputs> | null = null;
 
     private constructor() {
     }
@@ -13,10 +12,6 @@ export class XrmService {
             XrmService.instance = new XrmService();
         }
         return XrmService.instance;
-    }
-
-    setContext(context: ComponentFramework.Context<IInputs>): void {
-        this.context = context;
     }
 
     async fetch(endpoint: string): Promise<object[]> {

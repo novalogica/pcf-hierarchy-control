@@ -1,11 +1,9 @@
 import * as React from "react";
-import { useContext, useMemo, useState } from "react";
-import { FlowContext } from "../../context/flow-context";
+import { useMemo, useState } from "react";
 import { IconButton } from "@fluentui/react/lib/Button";
 import NodeTree from "./tree";
 
 const SidePanel = () => {
-  const {  } = useContext(FlowContext);
   const [isCollapsed, setIsCollapsed] = useState(false);
   
   const panelWidth = useMemo(() => isCollapsed ? 50 : 'auto', [isCollapsed])
