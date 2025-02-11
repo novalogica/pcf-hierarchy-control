@@ -5,7 +5,7 @@ import { XrmService } from "./service";
 import { Column, EntityMetadata, Form, RelationshipInfo } from "../interfaces/entity";
 import { Node } from "@xyflow/react/dist/esm/types/nodes";
 import { Edge } from "@xyflow/react/dist/esm/types/edges";
-import { initialEdges, initialNodes, transformEntityToNodes } from "../utils/transform";
+import { transformEntityToNodes } from "../utils/transform";
 import { extractColumns, generateColumns } from "../utils/form";
 
 export const useDataverse = (context: ComponentFramework.Context<IInputs>, entityName?: string, id?: string) => {
@@ -47,8 +47,9 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
             const columns = generateColumns(forms);
             setColumns(columns);
 
-            const nodes = await fetchHierarchy(relationship, columns)
-            console.log(nodes);
+            const {nodes, edges} = await fetchHierarchy(relationship, columns)
+            setNodes(nodes);
+            setEdges(edges);
         } catch (e: unknown) {
             setError(e);
         } finally {
@@ -92,7 +93,7 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
         return [metadata, hierarchicalRelationship ?? null];
     }
 
-    const fetchHierarchy = async (relationship: RelationshipInfo, columnList: Column[]): Promise<ComponentFramework.WebApi.Entity[]> => {
+    const fetchHierarchy = async (relationship: RelationshipInfo, columnList: Column[]) => {
         const columns = columnList.map((c) => c.logicalName).join(",");
         const { ReferencedAttribute, ReferencingAttribute } = relationship;
 
