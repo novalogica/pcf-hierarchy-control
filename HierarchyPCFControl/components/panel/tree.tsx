@@ -5,7 +5,7 @@ import { FlowContext } from '../../context/flow-context';
 
 const NodeTree: React.FunctionComponent = () => {
   const { nodes, selectedPath, moveToNode, onExpandNode } = useContext(FlowContext);
-  
+
   const mapNodesToNavLinks = (parentId: string | null = null): INavLink[] => {
     return nodes
       .filter((node) => (parentId ? node.data.parentId === parentId : !node.data.parentId))
@@ -50,15 +50,12 @@ const NodeTree: React.FunctionComponent = () => {
     selectedKey={selectedPath?.[selectedPath.length - 1]}
     onLinkExpandClick={(ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => {
       ev?.preventDefault();
-      if (item?.key) {
-        moveToNode(item.key);
-        onExpandNode(item.key);
-      }
-    }}
-    onLinkClick={(ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => {
-      ev?.preventDefault();
-      if (item?.key) {
-        moveToNode(item.key);
+      if ((ev?.target as HTMLElement).closest('.ms-Nav-chevron')) {
+        moveToNode(item?.key as string)
+        onExpandNode(item?.key as string);
+
+      } else {
+        moveToNode(item?.key as string);
       }
     }}
   />;
