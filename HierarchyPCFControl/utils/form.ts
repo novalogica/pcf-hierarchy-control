@@ -1,12 +1,7 @@
 import { Column, EntityMetadata, Form, RelationshipInfo } from "../interfaces/entity";
 import EntityDefinition from "../interfaces/entity/definition";
 
-export const extractColumns = (
-  cardXml: string,
-  relationship: RelationshipInfo,
-  attributes: EntityDefinition[],
-  metadata: EntityMetadata
-): Column[] => {
+const extractColumns = (cardXml: string, relationship: RelationshipInfo, attributes: EntityDefinition[], metadata: EntityMetadata): Column[] => {
   const parser = new DOMParser();
   const xmlDoc = parser.parseFromString(cardXml, "text/xml");
 
@@ -72,11 +67,16 @@ export const extractColumns = (
   return columns;
 };
 
-export const generateColumns = (forms: Form[]): Column[] => {
+const generateColumns = (forms: Form[]): Column[] => {
   const uniqueColumns = forms.reduce((acc, form) => {
     form.columns.forEach(column => acc.set(column.logicalName, column));
     return acc;
   }, new Map<string, Column>());
 
   return Array.from(uniqueColumns.values())
+}
+
+export {
+  extractColumns,
+  generateColumns
 }

@@ -18,6 +18,7 @@ export const transformEntityToNodes = (data: ComponentFramework.WebApi.Entity[])
     nodes.push({
       id: nodeId,
       position: { x, y },
+      //parentId: parentId ?? undefined,
       data: {
         label: item.name,
         expanded: true,
