@@ -54,6 +54,6 @@ export default Flow;
 const styles: Record<string, React.CSSProperties> = {
     main: {
         width: "100%",
-        height: "100vh",
+        height: "95vh",
     },
 };
