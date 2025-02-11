@@ -12,13 +12,13 @@ interface IProps {
 const NodeTree = ({ isCollapsed }: IProps) => {
   const { nodes, selectedPath, moveToNode, onExpandNode } = useContext(FlowContext);
 
-  const mapNodesToNavLinks = (parentId: string | null = null): INavLink[] => {
+  const mapNodesToNavLinks = (parentId: string | null = null, includeCollapsed: boolean = false): INavLink[] => {
     return nodes
-      .filter((node) => (parentId ? node.data.parentId === parentId : !node.data.parentId))
+      .filter((node) => includeCollapsed || (parentId ? node.data.parentId === parentId : !node.data.parentId))
       .map((node) => {
         const label = typeof node.data.label === 'string' ? node.data.label : '-';
-        const childrenLinks = mapNodesToNavLinks(node.id);
         const isSelected = selectedPath?.includes(node.id);
+        const childrenLinks = includeCollapsed ? undefined : mapNodesToNavLinks(node.id);
 
         return {
           key: node.id,
@@ -26,33 +26,14 @@ const NodeTree = ({ isCollapsed }: IProps) => {
           url: "",
           isSelected,
           isExpanded: node.data.expanded,
-          links: childrenLinks.length > 0 ? childrenLinks : undefined,
+          links: childrenLinks?.length ? childrenLinks : undefined,
           onClick: () => moveToNode(node.id)
         } as INavLink;
       });
   };
-
-  const mapCollapsedNodes = (): INavLink[] => {
-    return nodes
-      .map((node) => {
-        const label = typeof node.data.label === 'string' ? node.data.label : '-';
-        const isSelected = selectedPath?.includes(node.id);
-
-        return {
-          key: node.id,
-          name: label,
-          url: "",
-          isSelected,
-          isExpanded: node.data.expanded,
-          links: undefined,
-          onClick: () => moveToNode(node.id)
-        } as INavLink;
-      });
-  };
-
   const navLinkGroups: INavLinkGroup[] = useMemo(() => [
     {
-      links: isCollapsed ? mapCollapsedNodes() : mapNodesToNavLinks(null),
+      links: mapNodesToNavLinks(null, isCollapsed),
     },
   ], [nodes, isCollapsed]);
 

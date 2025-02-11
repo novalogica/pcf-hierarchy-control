@@ -2,12 +2,10 @@ import * as React from "react";
 import { useMemo, useState } from "react";
 import { IconButton } from "@fluentui/react/lib/Button";
 import NodeTree from "./tree";
-import ActiveNode from "./active-node";
 import { colors } from "../../utils/constants";
 
 const SidePanel = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  
   const panelWidth = useMemo(() => isCollapsed ? 90 : 275, [isCollapsed])
   const menuIcon = useMemo(() => isCollapsed ? "OpenPaneMirrored": "OpenPane", [isCollapsed])
   
