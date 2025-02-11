@@ -86,8 +86,8 @@ export default function useTree() {
         setSelectedPath(path);
 
         const currentZoom = getZoom();
-        const nodeCenterX = node.position.x + nodeWidth / 2;
-        const nodeCenterY = node.position.y + nodeHeight / 2;
+        const nodeCenterX = node.position.x + (nodeWidth / 2);
+        const nodeCenterY = node.position.y + (nodeHeight * 2);
 
         setCenter(nodeCenterX, nodeCenterY, { zoom: currentZoom, duration: 500 });
     }, [getZoom, setCenter]);

@@ -21,6 +21,7 @@ const NodeTree: React.FunctionComponent = () => {
           isSelected,
           isExpanded: node.data.expanded,
           links: childrenLinks.length > 0 ? childrenLinks : undefined,
+          onClick: () => moveToNode(node.id)
         } as INavLink;
       });
   };
@@ -53,9 +54,6 @@ const NodeTree: React.FunctionComponent = () => {
       if ((ev?.target as HTMLElement).closest('.ms-Nav-chevron')) {
         moveToNode(item?.key as string)
         onExpandNode(item?.key as string);
-
-      } else {
-        moveToNode(item?.key as string);
       }
     }}
   />;
