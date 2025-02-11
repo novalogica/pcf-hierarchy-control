@@ -17,7 +17,7 @@ const SidePanel = () => {
         onClick={() => setIsCollapsed(prev => !prev)}
         iconProps={{ iconName: menuIcon }}
       />
-      <div style={{...styles.treeContainer, overflow: 'auto'}}>
+      <div style={{...styles.treeContainer, overflowY: 'auto', overflowX: isCollapsed ? 'hidden': 'auto'}}>
         <NodeTree isCollapsed={isCollapsed}/>
       </div>
     </div>
