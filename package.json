@@ -16,6 +16,7 @@
     "@dagrejs/dagre": "^1.1.4",
     "@fluentui/react": "^8.122.9",
     "@xyflow/react": "^12.4.2",
+    "elkjs": "^0.9.3",
     "react-dom": "^17.0.2"
   },
   "devDependencies": {

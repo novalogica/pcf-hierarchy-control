@@ -18,5 +18,7 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
         return result
     }
 
-    return {}
+    return {
+        
+    }
 }

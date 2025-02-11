@@ -1,82 +1,59 @@
-import * as React from 'react';
-import { useContext, useEffect, useMemo, useState } from 'react';
-import { ReactFlow, Background, NodeMouseHandler, ReactFlowInstance, MiniMap } from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
-import { FlowContext } from '../../context/flow-context';
-import { findPath, getLayoutedElements, nodeHeight, nodeWidth } from '../../utils/utils';
-import NodeCard from './node/node';
-import { graph } from '../../app';
+import * as React from "react";
+import { useMemo } from "react";
+import { ReactFlow, MiniMap, Controls, Background } from "@xyflow/react";
+import useTree from "../../hooks/useTree";
+import NodeCard from "./node/node";
+import { FlowContext } from "../../context/flow-context";
+import SidePanel from "../panel/panel";
 
 const nodeTypes = {
     card: NodeCard,
 };
 
-const HierarchyFlow = () => {
-    const { nodes, edges, selectedPath, onNodesChange, setSelectedPath } = useContext(FlowContext);
-    const [flow, setFlow] = useState<ReactFlowInstance | null>(null);
+const Flow = () => {
+    const { nodes, edges, selectedPath, moveToNode, onExpandNode, getChildrenIds } = useTree();
 
-    const onNodeClick: NodeMouseHandler = (event, node) => {
-        if (!flow) return;
-
-        const path = findPath(node.id, edges);
-        setSelectedPath(path);
-
-        const currentZoom = flow.getZoom();
-        const nodeCenterX = node.position.x + nodeWidth / 2;
-        const nodeCenterY = node.position.y + nodeHeight / 2;
-
-        flow.setCenter(nodeCenterX, nodeCenterY, {
-            zoom: currentZoom,
-            duration: 500,
-        });
-    };
-
-    const visibleNodes = useMemo(() => {
-        return nodes.map((node) => {
-            const isVisible = selectedPath.length === 0 || selectedPath.includes(node.id);
-            return {
-                ...node,
-                //hidden: !isVisible,
-            };
-        });
-    }, [nodes, selectedPath]);
-
-    const visibleEdges = useMemo(() => {
+    const edgeList = useMemo(() => {
         return edges.map((edge) => {
             const isInPath = selectedPath.length === 0 || (selectedPath.includes(edge.source) && selectedPath.includes(edge.target));
             return {
                 ...edge,
-                //hidden: !isInPath,
                 style: {
-                    stroke: isInPath && selectedPath.length > 0 ? 'red' : '#ccc',
+                    stroke: isInPath && selectedPath.length > 0 ? 'rgba(65, 104, 189, 0.85)' : '#ccc',
                     strokeWidth: isInPath ? 3 : 1,
                 },
             };
         });
-    }, [edges, selectedPath]);
-    
-    useEffect(() => {
-        getLayoutedElements(graph, visibleNodes, visibleEdges)
-    }, [setSelectedPath, visibleEdges, visibleNodes])
-    
+    }, [edges, selectedPath])
+
+    const nodeList = useMemo(() => nodes.filter((node) => !node.hidden), [nodes]);
+
     return (
-        <div style={{ width: '100%', height: '100vh' }}>
-            <ReactFlow
-                onInit={setFlow}
-                nodes={visibleNodes}
-                edges={visibleEdges}
-                nodesDraggable={false}
-                edgesFocusable={false}
-                onNodesChange={onNodesChange}
-                onNodeClick={onNodeClick}
-                nodeTypes={nodeTypes}
-                fitView
-            >
-                <Background gap={16} />
-                <MiniMap />
-            </ReactFlow>
-        </div>
+        <FlowContext.Provider value={{nodes, edges, selectedPath, moveToNode, onExpandNode, getChildrenIds}}>
+            <div style={styles.main}>
+                <ReactFlow
+                    nodes={nodeList}
+                    edges={edgeList}
+                    nodesDraggable={false}
+                    edgesFocusable={false}
+                    nodeTypes={nodeTypes}
+                    fitView
+                >
+                    <MiniMap position="top-right"/>
+                    <Controls position="bottom-right"/>
+                    <Background gap={16} />
+                </ReactFlow>
+                <SidePanel />
+            </div>
+        </FlowContext.Provider>
     );
 };
 
-export default HierarchyFlow;
+export default Flow;
+
+const styles: Record<string, React.CSSProperties> = {
+    main: {
+        width: "100%",
+        height: "100%",
+    },
+};

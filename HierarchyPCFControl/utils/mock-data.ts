@@ -4,31 +4,31 @@ const initialNodes: Node[] = [
     {
       id: "1",
       position: { x: 0, y: 0 },
-      data: { label: "Product Marketing" },
+      data: { label: "Product Marketing", expanded: true },
       type: 'card'
     },
     {
       id: "2",
       position: { x: 0, y: 150 },
-      data: { label: "Advertising" },
+      data: { label: "Advertising", parentId: "1", expanded: true },
       type: 'card'
     },
     {
       id: "3a",
       position: { x: 0, y: 300 },
-      data: { label: "Amazon Advertising" },
-      type: 'card'
+      data: { label: "Amazon Advertising", parentId: "2", expanded: true },
+      type: 'card',
     },
     {
       id: "3b",
       position: { x: 0, y: 450 },
-      data: { label: "Google Advertising" },
-      type: 'card'
+      data: { label: "Google Advertising", parentId: "2", expanded: true },
+      type: 'card',
     },
     {
       id: "4b",
       position: { x: 0, y: 450 },
-      data: { label: "Google Advertising 2" },
+      data: { label: "Google Advertising 2", parentId: "3b", expanded: true },
       type: 'card'
     },
 ];
@@ -42,5 +42,5 @@ const initialEdges: Edge[] = [
 
 export {
     initialNodes,
-    initialEdges
+    initialEdges,
 }

@@ -7,26 +7,14 @@ import NodeTree from "./tree";
 const SidePanel = () => {
   const {  } = useContext(FlowContext);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   
   const panelWidth = useMemo(() => isCollapsed ? 50 : 'auto', [isCollapsed])
   const menuIcon = useMemo(() => isCollapsed ? "OpenPaneMirrored": "OpenPane", [isCollapsed])
-
-  const onRefreshClick = async () => {
-    setIsRefreshing(true);
-    //await onRefresh();
-    setIsRefreshing(false);
-  }
-
-  const currentForm = useMemo(() => ({
-    id: '0',
-    name: 'Test'
-  }), []);
-
+  
   return (
     <div style={{...styles.toolbar, width: panelWidth, alignItems: isCollapsed ? 'center': 'start'}}>
       <IconButton
-        style={styles.toolbarItem}
+        style={{...styles.toolbarItem, width: 'auto'}}
         aria-label={"Collapse"}
         onClick={() => setIsCollapsed(prev => !prev)}
         iconProps={{ iconName: menuIcon }}

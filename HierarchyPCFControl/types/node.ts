@@ -1,8 +1,9 @@
 import { type Node, type Edge } from '@xyflow/react';
 
 type NodeData = { 
-    parentId: string | null
-    [id: string]: string | number | object | null
+    parentId: string | null,
+    expanded: boolean,
+    label: string
 };
 
 export type NodeRecord = Node<NodeData>;

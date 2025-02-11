@@ -5,10 +5,8 @@ import App from "./app";
 
 export class HierarchyPCFControl implements ComponentFramework.StandardControl<IInputs, IOutputs> {
     private container: HTMLDivElement;
-    private notifyOutputChanged: () => void;
 
-    public init(context: ComponentFramework.Context<IInputs>,notifyOutputChanged: () => void, _: ComponentFramework.Dictionary, container: HTMLDivElement): void {
-        this.notifyOutputChanged = notifyOutputChanged;
+    public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, _: ComponentFramework.Dictionary, container: HTMLDivElement): void {
         this.container = container;
         context.mode.trackContainerResize(true);
         this.renderControl(context);
