@@ -4,7 +4,6 @@
     <property name="column" display-name-key="Column to be Attached" description-key="" of-type="Multiple" usage="bound" required="false" />
     <resources>
       <code path="index.ts" order="1"/>
-      <css path="styles/style.css" order="1" />
     </resources>
     <feature-usage>
       <uses-feature name="Utility" required="true" />

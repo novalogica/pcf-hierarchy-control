@@ -37,6 +37,7 @@ const Flow = () => {
                     nodesDraggable={false}
                     edgesFocusable={false}
                     nodeTypes={nodeTypes}
+                    proOptions={{ hideAttribution: true }}
                     fitView
                 >
                     <MiniMap position="top-right"/>
