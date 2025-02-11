@@ -1,4 +1,4 @@
-import { type Node } from '@xyflow/react';
+import { Node } from "@xyflow/react/dist/esm/types/nodes";
 
 type NodeData = { 
     parentId: string | null,

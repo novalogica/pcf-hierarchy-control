@@ -1,9 +1,15 @@
 import * as React from 'react';
 import { Nav, INavLinkGroup, INavLink, INavStyles } from '@fluentui/react/lib/Nav';
+import { PersonaSize } from "@fluentui/react/lib/Persona";
 import { useContext, useMemo } from 'react';
 import { FlowContext } from '../../context/flow-context';
+import { Badge } from '../badge/badge';
 
-const NodeTree: React.FunctionComponent = () => {
+interface IProps {
+  isCollapsed: boolean
+}
+
+const NodeTree = ({ isCollapsed }: IProps) => {
   const { nodes, selectedPath, moveToNode, onExpandNode } = useContext(FlowContext);
 
   const mapNodesToNavLinks = (parentId: string | null = null): INavLink[] => {
@@ -26,11 +32,29 @@ const NodeTree: React.FunctionComponent = () => {
       });
   };
 
+  const mapCollapsedNodes = (): INavLink[] => {
+    return nodes
+      .map((node) => {
+        const label = typeof node.data.label === 'string' ? node.data.label : '-';
+        const isSelected = selectedPath?.includes(node.id);
+
+        return {
+          key: node.id,
+          name: label,
+          url: "",
+          isSelected,
+          isExpanded: node.data.expanded,
+          links: undefined,
+          onClick: () => moveToNode(node.id)
+        } as INavLink;
+      });
+  };
+
   const navLinkGroups: INavLinkGroup[] = useMemo(() => [
     {
-      links: mapNodesToNavLinks(null),
+      links: isCollapsed ? mapCollapsedNodes() : mapNodesToNavLinks(null),
     },
-  ], [nodes]);
+  ], [nodes, isCollapsed]);
 
   const navStyles: Partial<INavStyles> = {
     link: {
@@ -49,6 +73,9 @@ const NodeTree: React.FunctionComponent = () => {
     groups={navLinkGroups} 
     styles={navStyles} 
     selectedKey={selectedPath?.[selectedPath.length - 1]}
+    onRenderLink={(props) => {
+      return <Badge key={props?.key} name={props?.name as string} size={PersonaSize.size32} isCollapsed={isCollapsed} />
+    }}
     onLinkExpandClick={(ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => {
       ev?.preventDefault();
       if ((ev?.target as HTMLElement).closest('.ms-Nav-chevron')) {

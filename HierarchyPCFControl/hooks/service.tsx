@@ -1,4 +1,3 @@
-import { IInputs } from "../generated/ManifestTypes";
 import { XrmRequest, XrmResponse } from "../interfaces/xrm";
 
 export class XrmService {

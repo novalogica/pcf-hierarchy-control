@@ -1,11 +1,13 @@
 import * as React from "react";
-import { NodeProps } from "@xyflow/react";
+import { useContext } from "react";
+import { NodeProps } from "@xyflow/react/dist/esm/types";
 import { NodeRecord } from "../../../types/node";
 import { FlowContext } from "../../../context/flow-context";
-import { useContext } from "react";
 import { IconButton } from "@fluentui/react/lib/Button";
+import { ControlContext } from "../../../context/control-context";
 
 const NodeExpandButton = ({ id, data }: NodeProps<NodeRecord>) => {
+  const { context } = useContext(ControlContext);
   const { onExpandNode } = useContext(FlowContext);
   
   const handleExpandNode = (e: React.MouseEvent<HTMLElement>) => {
@@ -13,14 +15,18 @@ const NodeExpandButton = ({ id, data }: NodeProps<NodeRecord>) => {
     onExpandNode(id);
   };
 
+  const label = React.useMemo(() => {
+    return context.resources.getString(data.expanded ? "collapse" : "expand")
+  }, [data.expanded])
+
   return (
-    <div style={styles.container}> 
-      <IconButton 
-        iconProps={{ iconName: data.expanded == true ? "ChevronDown" : "ChevronUp"}} 
-        aria-label={data.expanded ? "Collapse" : "Expand"}
-        onClick={handleExpandNode}
-      />
-    </div>
+    <IconButton 
+      iconProps={{ iconName: data.expanded == true ? "ChevronDown" : "ChevronUp"}} 
+      title={label}
+      aria-label={label}
+      onClick={handleExpandNode}
+      style={styles.container}
+    />
   );
 };
 

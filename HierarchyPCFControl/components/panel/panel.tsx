@@ -2,11 +2,13 @@ import * as React from "react";
 import { useMemo, useState } from "react";
 import { IconButton } from "@fluentui/react/lib/Button";
 import NodeTree from "./tree";
+import ActiveNode from "./active-node";
+import { colors } from "../../utils/constants";
 
 const SidePanel = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   
-  const panelWidth = useMemo(() => isCollapsed ? 50 : '275px', [isCollapsed])
+  const panelWidth = useMemo(() => isCollapsed ? 90 : 275, [isCollapsed])
   const menuIcon = useMemo(() => isCollapsed ? "OpenPaneMirrored": "OpenPane", [isCollapsed])
   
   return (
@@ -17,36 +19,8 @@ const SidePanel = () => {
         onClick={() => setIsCollapsed(prev => !prev)}
         iconProps={{ iconName: menuIcon }}
       />
-      <div style={{...styles.toolbarItem, justifyContent: 'center', alignItems: 'end'}}>
-        { 
-        /*
-          !isCollapsed && <div style={styles.formDropdownContainer}>
-            <label style={styles.dropdownLabel}>Forms</label>
-            <Dropdown 
-              appearance="outline" 
-              onOptionSelect={onFormSelected} 
-              selectedOptions={[currentForm.id]}
-              value={currentForm.name}
-            >
-              { formOptions }
-            </Dropdown>
-          </div>
-          <ToolbarButton
-          aria-label={"Refresh"}
-          appearance="primary"
-          onClick={onRefreshClick}
-          icon={<div style={isRefreshing ? styles.rotate : undefined}><ArrowClockwiseRegular /></div>}
-          />
-          */
-        }
-      </div>
-      <div style={styles.sidePanel}>
-        { 
-          !isCollapsed && <div style={styles.formDropdownContainer}>
-            <label style={styles.dropdownLabel}>Hierarchy</label>
-            <NodeTree />
-          </div>
-        }
+      <div style={{...styles.treeContainer, overflow: isCollapsed ? 'hidden' : 'auto'}}>
+        <NodeTree isCollapsed={isCollapsed}/>
       </div>
     </div>
   );
@@ -58,7 +32,7 @@ const styles: Record<string, React.CSSProperties> = {
   toolbar: {
     display: 'flex',
     flexDirection: 'column',
-    gap: 16,
+    gap: 24,
     position: 'absolute',
     top: 16,
     left: 16,
@@ -76,14 +50,16 @@ const styles: Record<string, React.CSSProperties> = {
     justifyContent: 'start',
     gap: 8
   },
-  sidePanel: {
+  treeContainer: {
     width: '100%', 
     height: '100%',
     display: 'flex', 
-    overflow: 'scroll',
+    overflow: 'auto',
     flexDirection: 'row',
     justifyContent: 'start',
-    gap: 8
+    backgroundColor: colors.secondaryBackground,
+    gap: 8,
+    borderRadius: 8
   },
   search: {
     width: '100%'
@@ -95,11 +71,12 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
-    gap: 4
+    gap: 4,
   },
   dropdownLabel: {
     fontSize: 12,
     fontWeight: 600,
-    color: 'rgb(163 155 155)'
+    color: colors.label,
+    textAlign: 'left'
   }
 }

@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Handle, Position, type NodeProps } from '@xyflow/react';
+import { Handle, type NodeProps } from '@xyflow/react';
 import { NodeRecord } from "../../../types/node";
 import { useContext, useMemo } from "react";
 import { FlowContext } from "../../../context/flow-context";
 import NodeExpandButton from "./expand-node";
+import { colors, handles } from "../../../utils/constants";
 
 const NodeCard = (props: NodeProps<NodeRecord>) => {
   const { id, data } = props;
@@ -25,14 +26,12 @@ const NodeCard = (props: NodeProps<NodeRecord>) => {
 
   return (
     <div style={cardStyle} onClick={handleCardClick}>
-      <Handle type="target" position={Position.Top} isConnectable={false} style={{ backgroundColor: 'transparent', border: 0 }}
-      />
       {data.label}
+      { hasChildrens && <NodeExpandButton {...props} />}
       {
-        hasChildrens && <NodeExpandButton {...props} />
-      }
-      {
-        <Handle type="source" position={Position.Bottom} isConnectable={false} style={{ backgroundColor: 'transparent', border: 0}}/>
+        handles.map((handle) => (
+          <Handle key={handle.type} type={handle.type} position={handle.position} isConnectable={false} style={styles.handle} />
+        ))
       }
     </div>
   );
@@ -50,12 +49,16 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundColor: 'white', 
     padding: 8, 
     borderRadius: 8, 
-    boxShadow: '0px 10px 15px -3px rgba(0,0,0,0.1)'
+    boxShadow: `0px 10px 15px -3px ${colors.black10}`
   },
   activeCard: {
     padding: 8, 
     borderRadius: 8,
-    border: '1.5px solid rgba(65, 104, 189, 0.25)',
-    boxShadow: '0px 10px 15px -3px rgba(65, 104, 189, 0.25)'
+    border: `1.5px solid ${colors.active25}`,
+    boxShadow: `0px 10px 15px -3px ${colors.active25}`
   },
+  handle : {
+    backgroundColor: colors.transparent, 
+    border: 0
+  }
 };
