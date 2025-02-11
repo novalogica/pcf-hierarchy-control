@@ -40,7 +40,17 @@ const Flow = () => {
                     proOptions={{ hideAttribution: true }}
                     fitView
                 >
-                    <MiniMap position="top-right"/>
+                    <MiniMap 
+                        position="top-right" 
+                        nodeColor={(n) => {
+                            if (selectedPath?.includes(n.id) && selectedPath?.[selectedPath.length - 1] != n.id) 
+                                return "rgba(65, 104, 189, 0.25)";
+                            if (selectedPath?.[selectedPath.length - 1] == n.id) 
+                                return "rgba(65, 104, 189, 0.75)";
+                            return '#bbb';
+                        }}
+                        nodeBorderRadius={16}
+                    />
                     <Controls position="bottom-right"/>
                     <Background gap={16} />
                 </ReactFlow>
