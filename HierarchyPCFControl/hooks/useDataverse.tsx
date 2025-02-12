@@ -47,7 +47,7 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
             const columns = generateColumns(forms);
             setColumns(columns);
 
-            const { nodes, edges } = await fetchHierarchy(relationship, columns)
+            const { nodes, edges } = await fetchHierarchy(relationship, metadata, columns)
             setNodes(nodes);
             setEdges(edges);
         } catch (e: unknown) {
@@ -93,7 +93,7 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
         return [metadata, hierarchicalRelationship ?? null];
     }
 
-    const fetchHierarchy = async (relationship: RelationshipInfo, columnList: Column[]) => {
+    const fetchHierarchy = async (relationship: RelationshipInfo, metadata: EntityMetadata, columnList: Column[]) => {
         const columns = columnList.map((c) => c.logicalName).join(",");
         const { ReferencedAttribute, ReferencingAttribute } = relationship;
 
@@ -109,7 +109,7 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
             `?$filter=Microsoft.Dynamics.CRM.UnderOrEqual(PropertyName='${ReferencedAttribute}',PropertyValue='${topParent[ReferencedAttribute]}')&$select=${columns}`
         );
 
-        return transformEntityToNodes(result.entities);
+        return transformEntityToNodes(result.entities, relationship, metadata._entityDescriptor.PrimaryNameAttribute);
     }
 
     return {

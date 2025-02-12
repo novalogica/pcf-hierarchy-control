@@ -4,7 +4,7 @@ import { NodeRecord } from "../../../types/node";
 import { useContext, useMemo } from "react";
 import { FlowContext } from "../../../context/flow-context";
 import NodeExpandButton from "./expand-node";
-import { colors, handles } from "../../../utils/constants";
+import { colors, handles, nodeHeight, nodeWidth } from "../../../utils/constants";
 
 const NodeCard = (props: NodeProps<NodeRecord>) => {
   const { id, data } = props;
@@ -44,8 +44,8 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    width: 300, 
-    height: 175, 
+    width: nodeWidth, 
+    height: nodeHeight, 
     backgroundColor: 'white', 
     padding: 8, 
     borderRadius: 8, 
