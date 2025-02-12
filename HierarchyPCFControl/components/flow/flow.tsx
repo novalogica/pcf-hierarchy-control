@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useLayoutEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { ReactFlow, MiniMap, Controls, Background } from "@xyflow/react";
 import { Node } from "@xyflow/react/dist/esm/types/nodes";
 import { Edge } from "@xyflow/react/dist/esm/types/edges";
@@ -16,10 +16,10 @@ interface IProps {
 }
 
 const Flow = ({ initialNodes, initialEdges }: IProps) => {
-    const { nodes, edges, selectedPath, selectedNode, moveToNode, onExpandNode, getChildrenIds, onNodesChange, onEdgesChange, onLayout } = useTree(initialNodes, initialEdges);
+    const { nodes, edges, selectedPath, selectedNode, moveToNode, onExpandNode, getChildrenIds } = useTree(initialNodes, initialEdges);
 
     const edgeList = useMemo(() => {
-        return edges?.map((edge) => {
+        return edges.map((edge) => {
             const isInPath = selectedPath.length === 0 || (selectedPath.includes(edge.source) && selectedPath.includes(edge.target));
             return {
                 ...edge,
@@ -28,14 +28,10 @@ const Flow = ({ initialNodes, initialEdges }: IProps) => {
                     strokeWidth: isInPath ? 3 : 1,
                 },
             };
-        }) ?? [];
+        });
     }, [edges, selectedPath])
 
-    const nodeList = useMemo(() => nodes?.filter((node) => !node.hidden) ?? [], [nodes]);
-
-    useLayoutEffect(() => {
-        onLayout({ useInitialNodes: true });
-    }, []);
+    const nodeList = useMemo(() => nodes.filter((node) => !node.hidden), [nodes]);
 
     return (
         <FlowContext.Provider value={{nodes, edges, selectedPath, selectedNode, moveToNode, onExpandNode, getChildrenIds}}>
@@ -43,8 +39,6 @@ const Flow = ({ initialNodes, initialEdges }: IProps) => {
                 <ReactFlow
                     nodes={nodeList}
                     edges={edgeList}
-                    onNodesChange={onNodesChange}
-                    onEdgesChange={onEdgesChange}
                     nodeTypes={{ card: NodeCard }}
                     proOptions={{ hideAttribution: true }}
                     nodesDraggable={false}

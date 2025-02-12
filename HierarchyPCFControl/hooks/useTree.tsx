@@ -1,71 +1,87 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useMemo, useState } from "react";
-import ELK, { ElkNode } from "elkjs/lib/elk.bundled.js";
-import { Position, useEdgesState, useNodesState, useReactFlow } from "@xyflow/react";
+import ELK from "elkjs/lib/elk.bundled.js";
+import { useReactFlow } from "@xyflow/react";
 import { Node } from "@xyflow/react/dist/esm/types/nodes";
 import { Edge } from "@xyflow/react/dist/esm/types/edges";
 
 import { findPath } from "../utils/utils";
 import { nodeWidth, nodeHeight } from "../utils/constants";
 
-const elk = new ELK();
-
 const layoutOptions = {
     "elk.algorithm": "layered",
     "elk.direction": "DOWN",
-    "elk.edgeRouting": "SPLINES",
-    "elk.layered.spacing.nodeNodeBetweenLayers": "25",
-    "elk.layered.spacing.edgeNodeBetweenLayers": "25",
+    "elk.edgeRouting": "ORTHOGONAL",
+    "elk.layered.spacing.nodeNodeBetweenLayers": "50",
+    "elk.layered.spacing.edgeNodeBetweenLayers": "10",
     "elk.layered.cycleBreaking.strategy": "DEPTH_FIRST",
-    "spacing.componentComponent": "25",
-    spacing: "25",
+    "spacing.componentComponent": "50",
+    spacing: "50",
 };
 
-const getLayoutedElements = async (nodes: any[], edges: any[], options = {}) => {
-    const graph = {
-      id: 'root',
-      layoutOptions: layoutOptions,
-      edges: edges,
-      children: nodes.map((node) => ({
-        ...node,
-        targetPosition: Position.Top,
-        sourcePosition: Position.Bottom,
-        width: nodeWidth,
-        height: nodeHeight,
-      })),
-    };
-  
-    const layoutedGraph = await elk.layout(graph);
-
-    return {
-        layoutedNodes: layoutedGraph.children?.map((node) => ({
-            ...node,
-            position: { x: node.x, y: node.y },
-        })),
-        layoutedEdges: layoutedGraph.edges,
-    };
-};
+const elk = new ELK();
 
 export default function useTree(initialNodes: Node[], initialEdges: Edge[]) {
     const { fitView, getZoom, setCenter } = useReactFlow();
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+    const [nodes, setNodes] = useState(initialNodes);
+    const [edges] = useState(initialEdges);
+    const [isAdjustingLayout, setIsAdjustingLayout] = useState(true);
     const [selectedPath, setSelectedPath] = useState<string[]>([]);
     
+    useEffect(() => {
+        const centerNodes = async () => {
+            if (isAdjustingLayout) {
+                applyAutoLayout();
+                setIsAdjustingLayout(false);
+            }
+        };
+
+        centerNodes();
+    }, [isAdjustingLayout]);
+
     const selectedNode = useMemo(() => {
         return nodes?.find(n => n.id == selectedPath[selectedPath.length - 1]);
     }, [selectedPath])
 
-    const onLayout = useCallback(async ({ useInitialNodes = false }) => {
-        const ns = useInitialNodes ? initialNodes : nodes;
-        const es = useInitialNodes ? initialEdges : edges;
+    const getLayoutedNodes = useCallback(async () => {
+        const validEdges = edges.filter((edge) =>
+            nodes.some((node) => node.id === edge.source) &&
+            nodes.some((node) => node.id === edge.target)
+        );
     
-        const { layoutedNodes, layoutedEdges} = await getLayoutedElements(ns, es);
+        const graph = {
+            id: "root",
+            layoutOptions,
+            children: nodes.map((n) => ({
+                id: n.id,
+                width: nodeWidth,
+                height: nodeHeight,
+            })),
+            edges: validEdges.map((e) => ({
+                id: e.id,
+                sources: [e.source],
+                targets: [e.target],
+            })),
+        };
+    
+        const layoutedGraph = await elk.layout(graph);
+    
+        return nodes.map((node) => {
+            const layoutedNode = layoutedGraph.children?.find((n) => n.id === node.id);
+            return {
+                ...node,
+                position: {
+                    x: layoutedNode?.x ?? 0,
+                    y: layoutedNode?.y ?? 0,
+                },
+            };
+        });
+    }, [nodes, edges]);
 
-        setNodes(layoutedNodes as any[]);
-        setEdges(layoutedEdges as any[]);
-        window.requestAnimationFrame(() => fitView({ duration: 750, padding: 1 }));
-    },  [nodes, edges]);
+    const applyAutoLayout = useCallback(async () => {
+        const layoutedNodes = await getLayoutedNodes();
+        setNodes(layoutedNodes);
+        fitView({ duration: 750, padding: 1 });
+    }, [setNodes, fitView]);
 
     const getChildrenIds = useCallback((nodeId: string) => {
         return edges
@@ -133,6 +149,7 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[]) {
     }, [nodes, edges, getChildrenIds, moveToNode]);
 
     return {
+        isAdjustingLayout,
         nodes,
         edges,
         selectedPath,
@@ -140,8 +157,5 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[]) {
         getChildrenIds,
         moveToNode,
         onExpandNode,
-        onNodesChange,
-        onEdgesChange,
-        onLayout
     };
 }
