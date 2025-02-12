@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Handle, type NodeProps } from '@xyflow/react';
+import { Handle, Position, type NodeProps } from '@xyflow/react';
 import { NodeRecord } from "../../../types/node";
 import { useContext, useMemo } from "react";
 import { FlowContext } from "../../../context/flow-context";
@@ -30,7 +30,7 @@ const NodeCard = (props: NodeProps<NodeRecord>) => {
       { hasChildrens && <NodeExpandButton {...props} />}
       {
         handles.map((handle) => (
-          <Handle key={handle.type} type={handle.type} position={handle.position} isConnectable={false} style={styles.handle} />
+          <Handle key={handle.type} type={handle.type} position={handle.position} isConnectable={false} style={styles.handle} id={handle.position}/>
         ))
       }
     </div>

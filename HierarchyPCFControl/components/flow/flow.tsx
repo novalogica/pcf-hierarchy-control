@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useMemo } from "react";
-import { ReactFlow, MiniMap, Controls, Background } from "@xyflow/react";
+import { ReactFlow, MiniMap, Controls, Background, ConnectionLineType } from "@xyflow/react";
 import { Node } from "@xyflow/react/dist/esm/types/nodes";
 import { Edge } from "@xyflow/react/dist/esm/types/edges";
 import { FlowContext } from "../../context/flow-context";
@@ -16,7 +16,7 @@ interface IProps {
 }
 
 const Flow = ({ initialNodes, initialEdges }: IProps) => {
-    const { nodes, edges, selectedPath, selectedNode, moveToNode, onExpandNode, getChildrenIds } = useTree(initialNodes, initialEdges);
+    const { nodes, edges, selectedPath, selectedNode, moveToNode, onExpandNode, getChildrenIds, onNodesChange, onEdgesChange } = useTree(initialNodes, initialEdges);
 
     const edgeList = useMemo(() => {
         return edges.map((edge) => {
@@ -41,8 +41,11 @@ const Flow = ({ initialNodes, initialEdges }: IProps) => {
                     edges={edgeList}
                     nodeTypes={{ card: NodeCard }}
                     proOptions={{ hideAttribution: true }}
+                    connectionLineType={ConnectionLineType.SmoothStep}
                     nodesDraggable={false}
                     edgesFocusable={false}
+                    onNodesChange={onNodesChange}
+                    onEdgesChange={onEdgesChange}
                     fitView
                 >
                     <MiniMap position="top-right" nodeColor={(node) => getNodeColor(node, selectedPath)} nodeBorderRadius={16} />

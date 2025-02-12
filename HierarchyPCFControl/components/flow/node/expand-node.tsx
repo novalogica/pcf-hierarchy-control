@@ -34,8 +34,8 @@ export default NodeExpandButton;
 
 const styles: Record<string, React.CSSProperties> = {
   container: {
-    height: 25,
-    width: 25,
+    height: 30,
+    width: 30,
     display: "flex",
     position: "absolute",
     alignItems: "center",
@@ -43,6 +43,6 @@ const styles: Record<string, React.CSSProperties> = {
     background: "white",
     borderRadius: 100,
     padding: 2,
-    bottom: -12
+    bottom: -30
   }
 }

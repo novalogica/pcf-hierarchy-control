@@ -19,9 +19,7 @@ export const transformEntityToNodes = (data: ComponentFramework.WebApi.Entity[],
         ...item,
       },
       type: "card",
-      position: { x: 0, y: 0 },
-      targetPosition: Position.Top,
-      sourcePosition: Position.Bottom,
+      position: { x: 0, y: 0 }
     });
 
     if (parentId) {

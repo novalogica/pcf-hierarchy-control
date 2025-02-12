@@ -14,9 +14,9 @@ const NodeTree = ({ isCollapsed }: IProps) => {
 
   const mapNodesToNavLinks = (parentId: string | null = null, includeCollapsed: boolean = false): INavLink[] => {
     return nodes
-      .filter((node) => includeCollapsed || (parentId ? node.data.parentId === parentId : !node.data.parentId))
+      .filter((node) => includeCollapsed || (parentId ? node.parentId === parentId : !node.parentId))
       .map((node) => {
-        const label = typeof node.data.label === 'string' ? node.data.label : '-';
+        const label = node.data.label && typeof node.data.label === 'string' ? node.data.label : '-';
         const isSelected = selectedPath?.includes(node.id);
         const childrenLinks = includeCollapsed ? undefined : mapNodesToNavLinks(node.id);
 

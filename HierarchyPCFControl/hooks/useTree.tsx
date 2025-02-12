@@ -1,87 +1,33 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import ELK from "elkjs/lib/elk.bundled.js";
-import { useReactFlow } from "@xyflow/react";
+import { useEdgesState, useNodesState, useReactFlow } from "@xyflow/react";
 import { Node } from "@xyflow/react/dist/esm/types/nodes";
 import { Edge } from "@xyflow/react/dist/esm/types/edges";
 
 import { findPath } from "../utils/utils";
 import { nodeWidth, nodeHeight } from "../utils/constants";
-
-const layoutOptions = {
-    "elk.algorithm": "layered",
-    "elk.direction": "DOWN",
-    "elk.edgeRouting": "ORTHOGONAL",
-    "elk.layered.spacing.nodeNodeBetweenLayers": "50",
-    "elk.layered.spacing.edgeNodeBetweenLayers": "10",
-    "elk.layered.cycleBreaking.strategy": "DEPTH_FIRST",
-    "spacing.componentComponent": "50",
-    spacing: "50",
-};
-
-const elk = new ELK();
+import { initialTree, treeRootId } from "../utils/mock-data";
+import { layoutElements } from "../utils/layout";
 
 export default function useTree(initialNodes: Node[], initialEdges: Edge[]) {
-    const { fitView, getZoom, setCenter } = useReactFlow();
-    const [nodes, setNodes] = useState(initialNodes);
-    const [edges] = useState(initialEdges);
-    const [isAdjustingLayout, setIsAdjustingLayout] = useState(true);
+    const { nodes: layoutedNodes, edges: layoutedEdges } = layoutElements(initialTree, treeRootId, 'TB');
+    const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
+    const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
+    const { getZoom, setCenter } = useReactFlow();
     const [selectedPath, setSelectedPath] = useState<string[]>([]);
     
-    useEffect(() => {
-        const centerNodes = async () => {
-            if (isAdjustingLayout) {
-                applyAutoLayout();
-                setIsAdjustingLayout(false);
-            }
-        };
-
-        centerNodes();
-    }, [isAdjustingLayout]);
+    const onLayout = useCallback((direction) => {
+        const { nodes: layoutedNodes, edges: layoutedEdges } = layoutElements(
+            initialTree,
+            treeRootId,
+            direction,
+        );
+        setNodes([...layoutedNodes]);
+        setEdges([...layoutedEdges]);
+    }, [nodes, edges]);
 
     const selectedNode = useMemo(() => {
         return nodes?.find(n => n.id == selectedPath[selectedPath.length - 1]);
     }, [selectedPath])
-
-    const getLayoutedNodes = useCallback(async () => {
-        const validEdges = edges.filter((edge) =>
-            nodes.some((node) => node.id === edge.source) &&
-            nodes.some((node) => node.id === edge.target)
-        );
-    
-        const graph = {
-            id: "root",
-            layoutOptions,
-            children: nodes.map((n) => ({
-                id: n.id,
-                width: nodeWidth,
-                height: nodeHeight,
-            })),
-            edges: validEdges.map((e) => ({
-                id: e.id,
-                sources: [e.source],
-                targets: [e.target],
-            })),
-        };
-    
-        const layoutedGraph = await elk.layout(graph);
-    
-        return nodes.map((node) => {
-            const layoutedNode = layoutedGraph.children?.find((n) => n.id === node.id);
-            return {
-                ...node,
-                position: {
-                    x: layoutedNode?.x ?? 0,
-                    y: layoutedNode?.y ?? 0,
-                },
-            };
-        });
-    }, [nodes, edges]);
-
-    const applyAutoLayout = useCallback(async () => {
-        const layoutedNodes = await getLayoutedNodes();
-        setNodes(layoutedNodes);
-        fitView({ duration: 750, padding: 1 });
-    }, [setNodes, fitView]);
 
     const getChildrenIds = useCallback((nodeId: string) => {
         return edges
@@ -149,9 +95,10 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[]) {
     }, [nodes, edges, getChildrenIds, moveToNode]);
 
     return {
-        isAdjustingLayout,
         nodes,
         edges,
+        onNodesChange,
+        onEdgesChange,
         selectedPath,
         selectedNode,
         getChildrenIds,
