@@ -2,7 +2,7 @@ import { PersonaInitialsColor } from "@fluentui/react/lib/Persona";
 import { Position, HandleType } from "@xyflow/react";
 
 const nodeWidth = 350;
-const nodeHeight = 300;
+const nodeHeight = 250;
 
 const colors = {
   active25: 'rgba(65, 104, 189, 0.25)',

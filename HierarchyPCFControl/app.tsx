@@ -21,7 +21,7 @@ const App = ({ context, entityName, id }: IProps) => {
             {
                 !isLoading && (
                     <ReactFlowProvider>
-                        <Flow initialNodes={nodes} initialEdges={edges} />
+                        <Flow initialNodes={nodes} initialEdges={edges}/>
                     </ReactFlowProvider>
                 )
             }

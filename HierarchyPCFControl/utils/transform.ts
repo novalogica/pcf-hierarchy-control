@@ -1,30 +1,27 @@
-import { type Node, type Edge } from '@xyflow/react';
+import { type Node, type Edge, Position } from '@xyflow/react';
 
-export const transformEntityToNodes = (data: ComponentFramework.WebApi.Entity[]) => {
+import { RelationshipInfo } from '../interfaces/entity';
+
+export const transformEntityToNodes = (data: ComponentFramework.WebApi.Entity[], relationship: RelationshipInfo, primaryNameAttribute: string) => {
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  const positionMap: { [key: string]: { x: number; y: number } } = {};
-
-  data.forEach((item, index) => {
-    const nodeId = item.accountid;
-    const parentId = item._parentaccountid_value;
-
-    const x = parentId ? (positionMap[parentId]?.x || 0) + 200 : 0;
-    const y = index * 150;
-
-    positionMap[nodeId] = { x, y };
+  data.forEach((item) => {
+    const nodeId = item[relationship.ReferencedAttribute];
+    const parentId = item[`_${relationship.ReferencingAttribute}_value`];
 
     nodes.push({
       id: nodeId,
-      position: { x, y },
-      //parentId: parentId ?? undefined,
+      parentId: parentId ?? undefined,
       data: {
-        label: item.name,
+        label: item[primaryNameAttribute],
         expanded: true,
         ...item,
       },
       type: "card",
+      position: { x: 0, y: 0 },
+      targetPosition: Position.Top,
+      sourcePosition: Position.Bottom,
     });
 
     if (parentId) {
