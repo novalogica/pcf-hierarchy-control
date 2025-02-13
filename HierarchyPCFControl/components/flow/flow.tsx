@@ -59,7 +59,7 @@ const Flow = ({ initialNodes, initialEdges }: IProps) => {
                     fitView
                 >
                     <MiniMap zoomable pannable position="top-right" nodeColor={(node) => getNodeColor(node, selectedPath)} nodeBorderRadius={16} />
-                    <Controls position="bottom-right"/>
+                    <Controls position="bottom-right" showInteractive={false} />
                     <Background gap={16} />
                 </ReactFlow>
                 <SidePanel />
