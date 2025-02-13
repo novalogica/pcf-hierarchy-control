@@ -43,6 +43,6 @@ const styles: Record<string, React.CSSProperties> = {
     background: "white",
     borderRadius: 100,
     padding: 2,
-    bottom: -30
+    bottom: -16
   }
 }
