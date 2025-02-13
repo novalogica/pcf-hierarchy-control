@@ -6,16 +6,17 @@ export const transformEntityToNodes = (data: ComponentFramework.WebApi.Entity[],
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  data.forEach((item) => {
+  data.forEach((item, index) => {
     const nodeId = item[relationship.ReferencedAttribute];
     const parentId = item[`_${relationship.ReferencingAttribute}_value`];
 
     nodes.push({
       id: nodeId,
-      parentId: parentId ?? undefined,
+      
       data: {
         label: item[primaryNameAttribute],
         expanded: true,
+        parentId: parentId ?? undefined,
         ...item,
       },
       type: "card",

@@ -45,7 +45,7 @@ const styles: Record<string, React.CSSProperties> = {
     flexDirection: 'column',
     alignItems: 'center',
     width: nodeWidth, 
-    height: nodeHeight, 
+    height: nodeHeight - 50, 
     backgroundColor: 'white', 
     padding: 8, 
     borderRadius: 8, 

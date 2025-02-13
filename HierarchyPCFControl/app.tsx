@@ -19,7 +19,7 @@ const App = ({ context, entityName, id }: IProps) => {
         <ControlContext.Provider value={{context}}>
             { isLoading && <p>{context.resources.getString("loading-message")}</p> }
             {
-                /*!isLoading &&*/ (
+                !isLoading && (
                     <ReactFlowProvider>
                         <Flow initialNodes={nodes} initialEdges={edges}/>
                     </ReactFlowProvider>

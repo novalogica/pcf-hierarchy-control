@@ -1,33 +1,80 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useEdgesState, useNodesState, useReactFlow } from "@xyflow/react";
-import { Node } from "@xyflow/react/dist/esm/types/nodes";
-import { Edge } from "@xyflow/react/dist/esm/types/edges";
-
+import { Edge, Node, useEdgesState, useNodesState, useReactFlow } from "@xyflow/react";
 import { findPath } from "../utils/utils";
-import { nodeWidth, nodeHeight } from "../utils/constants";
-import { initialTree, treeRootId } from "../utils/mock-data";
-import { layoutElements } from "../utils/layout";
+import {layout, graphlib} from '@dagrejs/dagre';
+import { nodeHeight, nodeWidth } from "../utils/constants";
+
+const dagreGraph = new graphlib.Graph().setDefaultEdgeLabel(() => ({}));
+
+const getLayoutedElements = (nodes: Node[], edges: Edge[], direction = 'TB') => {
+    const isHorizontal = direction === 'LR';
+    dagreGraph.setGraph({ rankdir: direction });
+
+    nodes.forEach((node) => {
+        dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
+    });
+
+    edges.forEach((edge) => {
+        dagreGraph.setEdge(edge.source, edge.target);
+    });
+
+    layout(dagreGraph);
+
+    const newNodes = nodes.map((node) => {
+        const nodeWithPosition = dagreGraph.node(node.id);
+        const newNode = {
+        ...node,
+        targetPosition: isHorizontal ? 'left' : 'top',
+        sourcePosition: isHorizontal ? 'right' : 'bottom',
+        position: {
+            x: nodeWithPosition.x - nodeWidth / 2,
+            y: nodeWithPosition.y - nodeHeight / 2,
+        },
+        };
+    
+        return newNode;
+    });
+
+    return { nodes: newNodes, edges };
+};
 
 export default function useTree(initialNodes: Node[], initialEdges: Edge[]) {
-    const { nodes: layoutedNodes, edges: layoutedEdges } = layoutElements(initialTree, treeRootId, 'TB');
-    const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
-    const { getZoom, setCenter } = useReactFlow();
+    const { fitView, getZoom, setCenter } = useReactFlow();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [nodes, setNodes, onNodesChange] = useNodesState<any>(initialNodes);
+    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [selectedPath, setSelectedPath] = useState<string[]>([]);
-    
+
+    useEffect(() => {
+        onLayout('TB');
+    }, [initialNodes, initialEdges]);
+
     const onLayout = useCallback((direction) => {
-        const { nodes: layoutedNodes, edges: layoutedEdges } = layoutElements(
-            initialTree,
-            treeRootId,
-            direction,
-        );
+        const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(nodes, edges, direction);
         setNodes([...layoutedNodes]);
         setEdges([...layoutedEdges]);
+        fitView({ duration: 750, padding: 1 });
     }, [nodes, edges]);
 
     const selectedNode = useMemo(() => {
         return nodes?.find(n => n.id == selectedPath[selectedPath.length - 1]);
     }, [selectedPath])
+
+    const moveToNode = useCallback((id: string) => {
+        const node = nodes.find((n) => n.id === id);
+
+        if(!node)
+            return;
+
+        const path = findPath(id, edges);
+        setSelectedPath(path);
+
+        const currentZoom = getZoom();
+        const nodeCenterX = node.position.x;
+        const nodeCenterY = node.position.y;
+
+        setCenter(nodeCenterX, nodeCenterY, { zoom: currentZoom, duration: 750 });
+    }, [getZoom, setCenter, nodes]);
 
     const getChildrenIds = useCallback((nodeId: string) => {
         return edges
@@ -48,22 +95,6 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[]) {
 
         return descendants;
     }, [getChildrenIds]);
-
-    const moveToNode = useCallback((id: string) => {
-        const node = nodes.find((n) => n.id === id);
-
-        if(!node)
-            return;
-
-        const path = findPath(id, edges);
-        setSelectedPath(path);
-
-        const currentZoom = getZoom();
-        const nodeCenterX = node.position.x + (nodeWidth / 2);
-        const nodeCenterY = node.position.y + (nodeHeight / 2);
-
-        setCenter(nodeCenterX, nodeCenterY, { zoom: currentZoom, duration: 500 });
-    }, [getZoom, setCenter]);
 
     const onExpandNode = useCallback((nodeId: string) => {
         setNodes((prevNodes) => {
@@ -97,12 +128,12 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[]) {
     return {
         nodes,
         edges,
-        onNodesChange,
-        onEdgesChange,
         selectedPath,
         selectedNode,
-        getChildrenIds,
         moveToNode,
         onExpandNode,
+        getChildrenIds,
+        onNodesChange,
+        onEdgesChange
     };
 }
