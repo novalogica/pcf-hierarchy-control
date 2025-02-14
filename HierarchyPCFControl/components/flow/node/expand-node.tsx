@@ -1,12 +1,13 @@
 import * as React from "react";
-import { useContext, useMemo } from "react";
+import { memo, useContext, useMemo } from "react";
 import { NodeProps } from "@xyflow/react/dist/esm/types";
+import { IconButton } from "@fluentui/react/lib/Button";
+
 import { NodeRecord } from "../../../types/node";
 import { FlowContext } from "../../../context/flow-context";
-import { IconButton } from "@fluentui/react/lib/Button";
 import { ControlContext } from "../../../context/control-context";
 
-const NodeExpandButton = React.memo(({ id, data }: NodeProps<NodeRecord>) => {
+const NodeExpandButton = memo(({ id, data }: NodeProps<NodeRecord>) => {
   const { context } = useContext(ControlContext);
   const { onExpandNode, direction } = useContext(FlowContext);
   

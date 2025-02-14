@@ -1,10 +1,11 @@
 import * as React from "react";
-import { useContext, useMemo, useCallback, useRef } from "react";
+import { useContext, useMemo, useCallback, useRef, memo } from "react";
 import { Attribute, NodeRecord } from "../../../types/node";
 import { Text } from "@fluentui/react/lib/Text";
 import { IconButton } from "@fluentui/react/lib/Button";
 import { PersonaSize } from "@fluentui/react/lib/Persona";
-import { Handle, HandleType, Position, type NodeProps } from '@xyflow/react';
+import { Handle, HandleType, Position } from '@xyflow/react';
+import { NodeProps } from "@xyflow/react/dist/esm/types";
 
 import { FlowContext } from "../../../context/flow-context";
 import NodeExpandButton from "./expand-node";
@@ -14,7 +15,7 @@ import LookupField from "../../lookup/lookup";
 import { useNavigation } from "../../../hooks/useNavigation";
 import { ControlContext } from "../../../context/control-context";
 
-const NodeCard = React.memo((props: NodeProps<NodeRecord>) => {
+const NodeCard = memo((props: NodeProps<NodeRecord>) => {
   const { id, data } = props;
   const { context, entityName, entityId, activeForm } = useContext(ControlContext);
   const { selectedNode, moveToNode, getChildrenIds, direction } = useContext(FlowContext);

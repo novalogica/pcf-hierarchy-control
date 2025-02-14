@@ -1,14 +1,15 @@
 import * as React from "react";
-import { useContext } from "react";
+import { memo, useContext } from "react";
+import { Link } from "@fluentui/react/lib/Link";
+
 import { ControlContext } from "../../context/control-context";
 import { useNavigation } from "../../hooks/useNavigation";
-import { Link } from "@fluentui/react/lib/Link";
 
 interface IProps {
     item: ComponentFramework.LookupValue
 }
 
-const LookupField = React.memo(({ item }: IProps) => {
+const LookupField = memo(({ item }: IProps) => {
     const { context } = useContext(ControlContext);
     const { openForm } = useNavigation(context)
     

@@ -1,13 +1,14 @@
 import * as React from "react";
-import { useCallback, useContext, useMemo, useState } from "react";
-import { ActionButton, IconButton } from "@fluentui/react/lib/Button";
+import { memo, useCallback, useContext, useMemo, useState } from "react";
+import { ActionButton } from "@fluentui/react/lib/Button";
+import { Dropdown, IDropdownOption } from "@fluentui/react/lib/Dropdown";
+
 import NodeTree from "./tree";
 import { colors } from "../../utils/constants";
 import { ControlContext } from "../../context/control-context";
-import { Dropdown, IDropdownOption } from "@fluentui/react/lib/Dropdown";
 import { FlowContext } from "../../context/flow-context";
 
-const SidePanel = () => {
+const SidePanel = memo(() => {
   const { forms, activeForm, setActiveForm } = useContext(ControlContext);
   const { direction, setDirection } = useContext(FlowContext);
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -52,8 +53,9 @@ const SidePanel = () => {
       </ActionButton>
     </div>
   );
-}
+})
 
+SidePanel.displayName = "SidePanel";
 export default SidePanel;
 
 const styles: Record<string, React.CSSProperties> = {

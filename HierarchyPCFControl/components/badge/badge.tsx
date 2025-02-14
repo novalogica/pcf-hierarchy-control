@@ -1,8 +1,9 @@
 import * as React from "react";
-import { useContext, useMemo } from "react";
+import { memo, useContext, useMemo } from "react";
 import { getInitials } from "@fluentui/react/lib/Utilities";
 import { IPersonaProps, Persona, PersonaSize } from "@fluentui/react/lib/Persona";
 import { Text } from "@fluentui/react/lib/Text";
+
 import { badgeColors } from "../../utils/constants";
 import { getColorFromInitials } from "../../utils/utils";
 import { useNavigation } from "../../hooks/useNavigation";
@@ -18,7 +19,7 @@ interface IProps {
   isClickable?: boolean
 }
 
-export const Badge = ({ name, etn, id, isCollapsed, size = PersonaSize.size40, nameStyle, isClickable = false }: IProps) => {
+const Badge = memo(({ name, etn, id, isCollapsed, size = PersonaSize.size40, nameStyle, isClickable = false }: IProps) => {
   const { context } = useContext(ControlContext);
   const { openForm } = useNavigation(context)
   const initials = useMemo(() => getInitials(name, false), [name])
@@ -44,7 +45,10 @@ export const Badge = ({ name, etn, id, isCollapsed, size = PersonaSize.size40, n
         />
     </div>
   );
-};
+});
+
+Badge.displayName == "Badge"
+export { Badge };
 
 const styles: Record<string, React.CSSProperties> = {
   badgeContainer: {
