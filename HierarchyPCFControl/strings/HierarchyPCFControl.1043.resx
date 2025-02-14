@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <data name="loading-message" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Laden...</value>
   </data>
   <data name="collapse" xml:space="preserve">
-    <value>Collapse</value>
+    <value>Inklappen</value>
   </data>
   <data name="expand" xml:space="preserve">
-    <value>Expand</value>
+    <value>Uitklappen</value>
+  </data>
+  <data name="horizontal" xml:space="preserve">
+    <value>Horizontaal</value>
+  </data>
+  <data name="vertical" xml:space="preserve">
+    <value>Verticaal</value>
+  </data>
+  <data name="form" xml:space="preserve">
+    <value>Formulier</value>
   </data>
   <data name="open-record" xml:space="preserve">
-    <value>Open</value>
+    <value>Openen</value>
+  </data>
+  <data name="error-compiling-entity" xml:space="preserve">
+    <value>Kan de logische naam van de entiteit of het record-ID niet ophalen. Controleer de configuratie.</value>
+  </data>
+  <data name="error-hierarchical-relationship" xml:space="preserve">
+    <value>Geen hiërarchische relatie gevonden. Zorg ervoor dat deze entiteit een correct geconfigureerde hiërarchische relatie heeft.</value>
+  </data>
+  <data name="error-selecting-form" xml:space="preserve">
+    <value>Geen kaartformulier beschikbaar voor deze entiteit. Maak een nieuw kaartformulier om door te gaan.</value>
   </data>
 </root>

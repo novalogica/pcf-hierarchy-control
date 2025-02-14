@@ -9,16 +9,25 @@
   <data name="expand" xml:space="preserve">
     <value>Expand</value>
   </data>
+  <data name="horizontal" xml:space="preserve">
+    <value>Horizontal</value>
+  </data>
+  <data name="vertical" xml:space="preserve">
+    <value>Vertical</value>
+  </data>
+  <data name="form" xml:space="preserve">
+    <value>Form</value>
+  </data>
   <data name="open-record" xml:space="preserve">
     <value>Open</value>
   </data>
   <data name="error-compiling-entity" xml:space="preserve">
-    An error occured when trying to compile Entity Logical Name or record id.
+    <value>Failed to retrieve the Entity Logical Name or Record ID. Please ensure the configuration is correct.</value>
   </data>
   <data name="error-hierarchical-relationship" xml:space="preserve">
-    Hierarchical relationship could not be found. Please make sure you have an hierarchical relationship configured for this entity.
+    <value>No hierarchical relationship found. Ensure that this entity has a properly configured hierarchical relationship.</value>
   </data>
   <data name="error-selecting-form" xml:space="preserve">
-    Could not find any card form for this entity. Please create a new one in order to proceed.
+    <value>No card form available for this entity. Create a new card form to continue.</value>
   </data>
 </root>

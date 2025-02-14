@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <data name="loading-message" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Carregando...</value>
   </data>
   <data name="collapse" xml:space="preserve">
-    <value>Collapse</value>
+    <value>Colapsar</value>
   </data>
   <data name="expand" xml:space="preserve">
-    <value>Expand</value>
+    <value>Expandir</value>
+  </data>
+  <data name="horizontal" xml:space="preserve">
+    <value>Horizontal</value>
+  </data>
+  <data name="vertical" xml:space="preserve">
+    <value>Vertical</value>
+  </data>
+  <data name="form" xml:space="preserve">
+    <value>Formulário</value>
   </data>
   <data name="open-record" xml:space="preserve">
-    <value>Open</value>
+    <value>Abrir</value>
   </data>
-</root>
+  <data name="error-compiling-entity" xml:space="preserve">
+    <value>Falha ao recuperar o nome da entidade ou o ID do registro. Verifique se a configuração está correta.</value>
+  </data>
+  <data name="error-hierarchical-relationship" xml:space="preserve">
+    <value>Nenhum relacionamento hierárquico encontrado. Certifique-se de que esta entidade tenha um relacionamento hierárquico configurado corretamente.</value>
+  </data>
+  <data name="error-selecting-form" xml:space="preserve">
+    <value>Nen

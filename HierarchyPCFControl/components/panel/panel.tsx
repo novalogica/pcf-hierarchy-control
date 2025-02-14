@@ -9,7 +9,7 @@ import { ControlContext } from "../../context/control-context";
 import { FlowContext } from "../../context/flow-context";
 
 const SidePanel = memo(() => {
-  const { forms, activeForm, setActiveForm } = useContext(ControlContext);
+  const { context, forms, activeForm, setActiveForm } = useContext(ControlContext);
   const { direction, setDirection } = useContext(FlowContext);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const panelWidth = useMemo(() => isCollapsed ? 90 : 275, [isCollapsed])
@@ -32,14 +32,19 @@ const SidePanel = memo(() => {
         onClick={() => setIsCollapsed(prev => !prev)}
         iconProps={{ iconName: menuIcon }}
       >
-        {!isCollapsed && "Collapse"}
+        {!isCollapsed && context.resources.getString("collapse")}
       </ActionButton>
       <Dropdown
-        placeholder="Select a form"
+        label={isCollapsed ? "" : context.resources.getString("form")}
         selectedKey={activeForm ? activeForm.formId : undefined}
         onChange={onFormChanged}
         options={formOptions}
-        styles={{root: { width: '100%' }, title: { border: "none" }, callout: { borderRadius: "0px 0px 16px 16px", minWidth: 'fit-content' }}}
+        styles={{
+          root: { width: '100%' }, 
+          title: { border: "none" },
+          callout: { borderRadius: "0px 0px 16px 16px", minWidth: 'fit-content' }, 
+          label: { textTransform: 'capitalize', fontSize: 12, marginLeft: 8, color: colors.label}
+        }}
       />
       <div style={{...styles.treeContainer, overflowY: 'auto', overflowX: isCollapsed ? 'hidden': 'auto'}}>
         <NodeTree isCollapsed={isCollapsed}/>
@@ -49,7 +54,7 @@ const SidePanel = memo(() => {
         onClick={() => setDirection(prev => prev == "TB" ? "LR" : "TB")}
         iconProps={{ iconName: direction == "TB" ? "HorizontalTabKey": "DistributeDown" }}
       >
-        {isCollapsed ? "" : direction == "TB" ? "Horizontal" : "Vertical"}
+        {isCollapsed ? "" : context.resources.getString(direction == "TB" ? "Horizontal" : "Vertical")}
       </ActionButton>
     </div>
   );

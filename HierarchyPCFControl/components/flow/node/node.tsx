@@ -89,7 +89,7 @@ const NodeCard = memo((props: NodeProps<NodeRecord>) => {
       </div>
       <div style={styles.footerContainer}>
         <Badge name={owner.name} etn={owner.entityType} id={owner.id} size={PersonaSize.size32} nameStyle={styles.ownerText} isClickable/>
-        <IconButton text="Open" iconProps={{ iconName: 'OpenInNewWindow' }} onClick={handleOpenRecord}/>
+        <IconButton iconProps={{ iconName: 'OpenInNewWindow' }} onClick={handleOpenRecord}/>
       </div>
       {hasChildrens && <NodeExpandButton {...props} />}      
       {handles.map((handle) => (

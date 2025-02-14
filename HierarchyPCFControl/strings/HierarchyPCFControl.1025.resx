@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <data name="loading-message" xml:space="preserve">
-    <value>Loading...</value>
+    <value>جارٍ التحميل...</value>
   </data>
   <data name="collapse" xml:space="preserve">
-    <value>Collapse</value>
+    <value>طي</value>
   </data>
   <data name="expand" xml:space="preserve">
-    <value>Expand</value>
+    <value>توسيع</value>
+  </data>
+  <data name="horizontal" xml:space="preserve">
+    <value>أفقي</value>
+  </data>
+  <data name="vertical" xml:space="preserve">
+    <value>عمودي</value>
+  </data>
+  <data name="form" xml:space="preserve">
+    <value>نموذج</value>
   </data>
   <data name="open-record" xml:space="preserve">
-    <value>Open</value>
+    <value>فتح</value>
+  </data>
+  <data name="error-compiling-entity" xml:space="preserve">
+    <value>فشل في استرداد الاسم المنطقي للكيان أو معرف السجل. يرجى التأكد من صحة التكوين.</value>
+  </data>
+  <data name="error-hierarchical-relationship" xml:space="preserve">
+    <value>لم يتم العثور على علاقة هرمية. تأكد من أن هذا الكيان يحتوي على علاقة هرمية مهيأة بشكل صحيح.</value>
+  </data>
+  <data name="error-selecting-form" xml:space="preserve">
+    <value>لا يوجد نموذج بطاقة متاح لهذا الكيان. قم بإنشاء نموذج بطاقة جديد للمتابعة.</value>
   </data>
 </root>

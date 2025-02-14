@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <data name="loading-message" xml:space="preserve">
-    <value>Loading...</value>
+    <value>加载中...</value>
   </data>
   <data name="collapse" xml:space="preserve">
-    <value>Collapse</value>
+    <value>折叠</value>
   </data>
   <data name="expand" xml:space="preserve">
-    <value>Expand</value>
+    <value>展开</value>
+  </data>
+  <data name="horizontal" xml:space="preserve">
+    <value>水平</value>
+  </data>
+  <data name="vertical" xml:space="preserve">
+    <value>垂直</value>
+  </data>
+  <data name="form" xml:space="preserve">
+    <value>表单</value>
   </data>
   <data name="open-record" xml:space="preserve">
-    <value>Open</value>
+    <value>打开</value>
+  </data>
+  <data name="error-compiling-entity" xml:space="preserve">
+    <value>无法获取实体逻辑名称或记录 ID。请确保配置正确。</value>
+  </data>
+  <data name="error-hierarchical-relationship" xml:space="preserve">
+    <value>未找到层次关系。请确保此实体具有正确配置的层次关系。</value>
+  </data>
+  <data name="error-selecting-form" xml:space="preserve">
+    <value>此实体没有可用的卡片表单。请创建新的卡片表单以继续。</value>
   </data>
 </root>

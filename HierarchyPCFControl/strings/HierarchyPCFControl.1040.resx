@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <data name="loading-message" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Caricamento...</value>
   </data>
   <data name="collapse" xml:space="preserve">
-    <value>Collapse</value>
+    <value>Comprimi</value>
   </data>
   <data name="expand" xml:space="preserve">
-    <value>Expand</value>
+    <value>Espandi</value>
+  </data>
+  <data name="horizontal" xml:space="preserve">
+    <value>Orizzontale</value>
+  </data>
+  <data name="vertical" xml:space="preserve">
+    <value>Verticale</value>
+  </data>
+  <data name="form" xml:space="preserve">
+    <value>Modulo</value>
   </data>
   <data name="open-record" xml:space="preserve">
-    <value>Open</value>
+    <value>Apri</value>
+  </data>
+  <data name="error-compiling-entity" xml:space="preserve">
+    <value>Impossibile recuperare il nome logico dell'entità o l'ID del record. Assicurati che la configurazione sia corretta.</value>
+  </data>
+  <data name="error-hierarchical-relationship" xml:space="preserve">
+    <value>Nessuna relazione gerarchica trovata. Assicurati che questa entità abbia una relazione gerarchica configurata correttamente.</value>
+  </data>
+  <data name="error-selecting-form" xml:space="preserve">
+    <value>Nessun modulo di scheda disponibile per questa entità. Crea un nuovo modulo di scheda per continuare.</value>
   </data>
 </root>

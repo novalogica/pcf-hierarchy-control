@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <data name="loading-message" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Lädt...</value>
   </data>
   <data name="collapse" xml:space="preserve">
-    <value>Collapse</value>
+    <value>Einklappen</value>
   </data>
   <data name="expand" xml:space="preserve">
-    <value>Expand</value>
+    <value>Erweitern</value>
+  </data>
+  <data name="horizontal" xml:space="preserve">
+    <value>Horizontal</value>
+  </data>
+  <data name="vertical" xml:space="preserve">
+    <value>Vertikal</value>
+  </data>
+  <data name="form" xml:space="preserve">
+    <value>Formular</value>
   </data>
   <data name="open-record" xml:space="preserve">
-    <value>Open</value>
+    <value>Öffnen</value>
+  </data>
+  <data name="error-compiling-entity" xml:space="preserve">
+    <value>Fehler beim Abrufen des Entity Logical Name oder der Datensatz-ID. Bitte stellen Sie sicher, dass die Konfiguration korrekt ist.</value>
+  </data>
+  <data name="error-hierarchical-relationship" xml:space="preserve">
+    <value>Keine hierarchische Beziehung gefunden. Stellen Sie sicher, dass diese Entität eine korrekt konfigurierte hierarchische Beziehung hat.</value>
+  </data>
+  <data name="error-selecting-form" xml:space="preserve">
+    <value>Kein Kartenformular für diese Entität verfügbar. Erstellen Sie ein neues Kartenformular, um fortzufahren.</value>
   </data>
 </root>

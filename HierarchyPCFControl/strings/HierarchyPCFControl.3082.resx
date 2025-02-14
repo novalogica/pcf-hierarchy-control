@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <data name="loading-message" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Cargando...</value>
   </data>
   <data name="collapse" xml:space="preserve">
-    <value>Collapse</value>
+    <value>Colapsar</value>
   </data>
   <data name="expand" xml:space="preserve">
-    <value>Expand</value>
+    <value>Expandir</value>
+  </data>
+  <data name="horizontal" xml:space="preserve">
+    <value>Horizontal</value>
+  </data>
+  <data name="vertical" xml:space="preserve">
+    <value>Vertical</value>
+  </data>
+  <data name="form" xml:space="preserve">
+    <value>Formulario</value>
   </data>
   <data name="open-record" xml:space="preserve">
-    <value>Open</value>
+    <value>Abrir</value>
+  </data>
+  <data name="error-compiling-entity" xml:space="preserve">
+    <value>Error al obtener el nombre de la entidad o el ID del registro. Asegúrese de que la configuración sea correcta.</value>
+  </data>
+  <data name="error-hierarchical-relationship" xml:space="preserve">
+    <value>No se encontró una relación jerárquica. Asegúrese de que esta entidad tenga una relación jerárquica correctamente configurada.</value>
+  </data>
+  <data name="error-selecting-form" xml:space="preserve">
+    <value>No hay un formulario de tarjeta disponible para esta entidad. Cree un nuevo formulario de tarjeta para continuar.</value>
   </data>
 </root>

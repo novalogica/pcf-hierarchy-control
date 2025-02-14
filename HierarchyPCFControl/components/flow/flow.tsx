@@ -1,14 +1,14 @@
 import * as React from "react";
 import { memo, useMemo, useState } from "react";
 import { ReactFlow, MiniMap, Controls, Background, ConnectionLineType, Panel } from "@xyflow/react";
-import { Node } from "@xyflow/react/dist/esm/types/nodes";
-import { Edge } from "@xyflow/react/dist/esm/types/edges";
-import { FlowContext } from "../../context/flow-context";
-import useTree from "../../hooks/useTree";
-import NodeCard from "./node/node";
-import SidePanel from "../panel/panel";
+import { Node, Edge } from "@xyflow/react/dist/esm/types";
+
 import { colors, nodeLengthLimit } from "../../utils/constants";
+import { FlowContext } from "../../context/flow-context";
 import { getNodeColor } from "../../utils/utils";
+import useTree from "../../hooks/useTree";
+import SidePanel from "../panel/panel";
+import NodeCard from "./node/node";
 
 interface IProps {
     initialNodes: Node[],
@@ -64,13 +64,16 @@ const Flow = memo(({ initialNodes, initialEdges }: IProps) => {
                             <MiniMap pannable position="top-right" nodeColor={(node) => getNodeColor(node, selectedPath)} nodeBorderRadius={16} />
                         ) 
                     }
-                    <Controls position="bottom-right" showInteractive={false} showFitView={initialNodes && initialNodes.length <= nodeLengthLimit} />
+                    <Controls 
+                        position="bottom-right" 
+                        showInteractive={false} 
+                        showFitView={initialNodes && initialNodes.length <= nodeLengthLimit} 
+                    />
                     <Background gap={16} />
                     <Panel position="top-left" style={styles.panel}>
                         <SidePanel />
                     </Panel>
                 </ReactFlow>
-                <SidePanel />
             </div>
         </FlowContext.Provider>
     );
