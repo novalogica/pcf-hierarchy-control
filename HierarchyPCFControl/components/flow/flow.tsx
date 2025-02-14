@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { ReactFlow, MiniMap, Controls, Background, ConnectionLineType, Panel } from "@xyflow/react";
 import { Node } from "@xyflow/react/dist/esm/types/nodes";
 import { Edge } from "@xyflow/react/dist/esm/types/edges";
@@ -7,7 +7,7 @@ import { FlowContext } from "../../context/flow-context";
 import useTree from "../../hooks/useTree";
 import NodeCard from "./node/node";
 import SidePanel from "../panel/panel";
-import { colors } from "../../utils/constants";
+import { colors, nodeLengthLimit } from "../../utils/constants";
 import { getNodeColor } from "../../utils/utils";
 
 interface IProps {
@@ -15,7 +15,7 @@ interface IProps {
     initialEdges: Edge[],
 }
 
-const Flow = ({ initialNodes, initialEdges }: IProps) => {
+const Flow = memo(({ initialNodes, initialEdges }: IProps) => {
     const [direction, setDirection] = useState('TB');
     const { 
         nodes, 
@@ -59,8 +59,12 @@ const Flow = ({ initialNodes, initialEdges }: IProps) => {
                     onEdgesChange={onEdgesChange}
                     fitView
                 >
-                    <MiniMap pannable position="top-right" nodeColor={(node) => getNodeColor(node, selectedPath)} nodeBorderRadius={16} />
-                    <Controls position="bottom-right" showInteractive={false} />
+                    { 
+                        initialNodes && initialNodes.length <= nodeLengthLimit && (
+                            <MiniMap pannable position="top-right" nodeColor={(node) => getNodeColor(node, selectedPath)} nodeBorderRadius={16} />
+                        ) 
+                    }
+                    <Controls position="bottom-right" showInteractive={false} showFitView={initialNodes && initialNodes.length <= nodeLengthLimit} />
                     <Background gap={16} />
                     <Panel position="top-left" style={styles.panel}>
                         <SidePanel />
@@ -70,8 +74,9 @@ const Flow = ({ initialNodes, initialEdges }: IProps) => {
             </div>
         </FlowContext.Provider>
     );
-};
+});
 
+Flow.displayName = "Flow"
 export default Flow;
 
 const styles: Record<string, React.CSSProperties> = {

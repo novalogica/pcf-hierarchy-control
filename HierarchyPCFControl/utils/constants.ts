@@ -3,6 +3,7 @@ import { Column } from "../interfaces/entity";
 
 const nodeWidth = 550;
 const nodeHeight = 450;
+const nodeLengthLimit = 250;
 
 const colors = {
   active25: 'rgba(65, 104, 189, 0.25)',
@@ -53,5 +54,6 @@ export {
   nodeHeight,
   colors,
   badgeColors,
-  defaultColumns
+  defaultColumns,
+  nodeLengthLimit
 }

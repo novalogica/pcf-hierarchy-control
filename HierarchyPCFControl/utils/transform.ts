@@ -2,6 +2,7 @@ import { type Node, type Edge } from '@xyflow/react';
 
 import { Column, RelationshipInfo } from '../interfaces/entity';
 import { findPath } from './utils';
+import { nodeLengthLimit } from './constants';
 
 export const transformEntityToNodes = (currentRecordId: string, data: ComponentFramework.WebApi.Entity[], columns: Column[], relationship: RelationshipInfo, primaryNameAttribute: string) => {
   let nodes: Node[] = [];
@@ -34,7 +35,7 @@ export const transformEntityToNodes = (currentRecordId: string, data: ComponentF
     }
   });
 
-  if(nodes && nodes.length > 250) {
+  if(nodes && nodes.length > nodeLengthLimit) {
     nodes = collapseHierarchyBasedOnNodesLength(currentRecordId, nodes, edges);
   }
     
