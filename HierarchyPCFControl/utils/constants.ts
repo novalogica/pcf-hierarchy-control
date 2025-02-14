@@ -12,7 +12,7 @@ const colors = {
   label: 'rgb(163 155 155)',
   transparent: 'transparent',
   secondaryBackground: 'rgb(240, 240, 240, 0.3)',
-  badgeColor: '#424b54'
+  badgeColor: 'rgb(158 160 163)'
 }
 
 const badgeColors = [
