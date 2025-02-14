@@ -28,4 +28,6 @@
     <value>Nenhum relacionamento hierárquico encontrado. Certifique-se de que esta entidade tenha um relacionamento hierárquico configurado corretamente.</value>
   </data>
   <data name="error-selecting-form" xml:space="preserve">
-    <value>Nen
+    <value>Nenhum formulário de cartão disponível para esta entidade. Crie um novo formulário de cartão para continuar.</value>
+  </data>
+</root>

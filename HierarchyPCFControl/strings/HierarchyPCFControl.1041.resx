@@ -28,4 +28,6 @@
     <value>階層関係が見つかりませんでした。このエンティティに適切に設定された階層関係があることを確認してください。</value>
   </data>
   <data name="error-selecting-form" xml:space="preserve">
-    <value>このエ
+    <value>このエンティティに利用可能なカードフォームがありません。続行するには、新しいカードフォームを作成してください。</value>
+  </data>
+</root>
