@@ -7,7 +7,7 @@ type NodeData = {
     attributes?: Attribute;
 }
 
-type Attribute = {
+export type Attribute = {
     [key: string]: any;
 }
 

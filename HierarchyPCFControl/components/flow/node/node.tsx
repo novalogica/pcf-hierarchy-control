@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Handle, type NodeProps } from '@xyflow/react';
-import { NodeRecord } from "../../../types/node";
+import { Attribute, NodeRecord } from "../../../types/node";
 import { useContext, useMemo, useCallback, useRef } from "react";
 import { FlowContext } from "../../../context/flow-context";
 import NodeExpandButton from "./expand-node";
@@ -15,7 +15,7 @@ import { ControlContext } from "../../../context/control-context";
 
 const NodeCard = React.memo((props: NodeProps<NodeRecord>) => {
   const { id, data } = props;
-  const { context, entityName } = useContext(ControlContext);
+  const { context, entityName, entityId } = useContext(ControlContext);
   const { selectedNode, selectedPath, moveToNode, getChildrenIds } = useContext(FlowContext);
   const { openForm } = useNavigation(context)
   const detailRef = useRef<HTMLDivElement>(null);
@@ -56,17 +56,21 @@ const NodeCard = React.memo((props: NodeProps<NodeRecord>) => {
     )) : []
   }, [data.attributes])  
 
+  const owner = useMemo(() => data.attributes!["_ownerid_value"].value as ComponentFramework.LookupValue, [data.attributes])
+
+  const state = useMemo(() => data.attributes!["statecode"] as Attribute, [data.attributes])
+
   return (
     <div style={cardStyle} onClick={handleCardClick}>
       <div style={styles.header}>
-        <Badge name={data.label} size={PersonaSize.size48} nameStyle={styles.cardBadgeName} />
-        <span style={styles.statusBadge}>{data.attributes!["statecode"].value}</span>
+        <Badge name={data.label} etn={entityName} id={entityId} size={PersonaSize.size48} nameStyle={styles.cardBadgeName} />
+        <span style={styles.statusBadge}>{state.value}</span>
       </div>
       <div ref={detailRef} style={styles.detailsContainer}>
         {attributes}
       </div>
       <div style={styles.footerContainer}>
-        <Badge name={data.attributes!["_ownerid_value"].value.name} size={PersonaSize.size32} />
+        <Badge name={owner.name} etn={owner.entityType} id={owner.id} size={PersonaSize.size32} nameStyle={styles.ownerText}/>
         <IconButton text="Open" iconProps={{ iconName: 'ChevronRight' }} onClick={handleOpenRecord}/>
       </div>
       {hasChildrens && <NodeExpandButton {...props} />}      
@@ -172,5 +176,9 @@ const styles: { [key: string]: React.CSSProperties } = {
     handle: {
       border: 0,
       backgroundColor: 'transparent'
+    },
+    ownerText: {
+      textDecoration: 'underline',
+      color: colors.active75
     }
 }

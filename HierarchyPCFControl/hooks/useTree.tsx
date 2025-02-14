@@ -48,6 +48,10 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [selectedPath, setSelectedPath] = useState<string[]>([]);
 
+    const selectedNode = useMemo(() => {
+        return nodes?.find(n => n.id == selectedPath[selectedPath.length - 1]);
+    }, [selectedPath])
+
     useEffect(() => onLayout(direction), [initialNodes, initialEdges]);
 
     const onLayout = useCallback((direction) => {
@@ -63,10 +67,6 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
             setTimeout(() => setCenter(node.position.x, node.position.y, { zoom: 0.75, duration: 450 }), 750);
         }
     }, [entityId, nodes, edges]);
-
-    const selectedNode = useMemo(() => {
-        return nodes?.find(n => n.id == selectedPath[selectedPath.length - 1]);
-    }, [selectedPath])
 
     const moveToNode = useCallback((id: string) => {
         const node = nodes.find((n) => n.id === id);
