@@ -20,9 +20,9 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
         return nodes?.find(n => n.id == selectedPath[selectedPath.length - 1]);
     }, [selectedPath])
 
-    useEffect(() => onLayout(direction), [initialNodes, initialEdges, direction]);
+    useEffect(() => onLayout(), [initialNodes, initialEdges, direction]);
 
-    const onLayout = useCallback((direction) => {
+    const onLayout = useCallback(() => {
         const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements();
         setNodes([...layoutedNodes]);
         setEdges([...layoutedEdges]);
@@ -144,7 +144,6 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
         });
     }, [nodes, edges, getChildrenIds, moveToNode]);
     
-
     return {
         nodes,
         edges,

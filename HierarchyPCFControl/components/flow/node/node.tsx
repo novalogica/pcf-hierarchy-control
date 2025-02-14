@@ -1,14 +1,15 @@
 import * as React from "react";
-import { Handle, HandleType, Position, type NodeProps } from '@xyflow/react';
-import { Attribute, NodeRecord } from "../../../types/node";
 import { useContext, useMemo, useCallback, useRef } from "react";
+import { Attribute, NodeRecord } from "../../../types/node";
+import { Text } from "@fluentui/react/lib/Text";
+import { IconButton } from "@fluentui/react/lib/Button";
+import { PersonaSize } from "@fluentui/react/lib/Persona";
+import { Handle, HandleType, Position, type NodeProps } from '@xyflow/react';
+
 import { FlowContext } from "../../../context/flow-context";
 import NodeExpandButton from "./expand-node";
 import { colors, nodeHeight, nodeWidth } from "../../../utils/constants";
-import { PersonaSize } from "@fluentui/react/lib/Persona";
-import { Text } from "@fluentui/react/lib/Text";
 import { Badge } from "../../badge/badge";
-import { IconButton } from "@fluentui/react";
 import LookupField from "../../lookup/lookup";
 import { useNavigation } from "../../../hooks/useNavigation";
 import { ControlContext } from "../../../context/control-context";
@@ -195,6 +196,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     },
     ownerText: {
       textDecoration: 'underline',
-      color: colors.active75
+      color: colors.active75,
+      fontSize: 16
     }
 }
