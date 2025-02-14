@@ -12,4 +12,13 @@
   <data name="open-record" xml:space="preserve">
     <value>Open</value>
   </data>
+  <data name="error-compiling-entity" xml:space="preserve">
+    An error occured when trying to compile Entity Logical Name or record id.
+  </data>
+  <data name="error-hierarchical-relationship" xml:space="preserve">
+    Hierarchical relationship could not be found. Please make sure you have an hierarchical relationship configured for this entity.
+  </data>
+  <data name="error-selecting-form" xml:space="preserve">
+    Could not find any card form for this entity. Please create a new one in order to proceed.
+  </data>
 </root>

@@ -10,8 +10,8 @@
   >
     <property 
       name="column" 
-      display-name-key="Column to be Attached" 
-      description-key="" 
+      display-name-key="Column" 
+      description-key="A columns where the Hierarchy can be attached" 
       of-type="SingleLine.Text" 
       usage="bound" 
       required="true"

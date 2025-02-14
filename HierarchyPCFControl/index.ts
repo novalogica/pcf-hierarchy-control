@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
+import '@xyflow/react/dist/style.css';
 import App from "./app";
 
 export class HierarchyPCFControl implements ComponentFramework.StandardControl<IInputs, IOutputs> {

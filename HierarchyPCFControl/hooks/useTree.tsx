@@ -32,7 +32,7 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
         if(node) {
             const path = findPath(entityId, edges);
             setSelectedPath(path);
-            setTimeout(() => setCenter(node.position.x, node.position.y, { zoom: 0.75, duration: 750 }), 1000);
+            setTimeout(() => setCenter(node.position.x, node.position.y, { zoom: 0.75, duration: 500 }), 500);
         }
     }, [entityId, nodes, edges]);
 
@@ -49,7 +49,7 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
         const nodeCenterX = node.position.x;
         const nodeCenterY = node.position.y;
 
-        setCenter(nodeCenterX, nodeCenterY, { zoom: currentZoom, duration: 750 });
+        setCenter(nodeCenterX, nodeCenterY, { zoom: currentZoom, duration: 500 });
     }, [getZoom, setCenter, nodes]);
 
     const getLayoutedElements = useCallback(() => {

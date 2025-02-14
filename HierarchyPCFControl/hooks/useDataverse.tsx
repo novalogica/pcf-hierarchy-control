@@ -9,7 +9,7 @@ import { XrmService } from "./service";
 
 export const useDataverse = (context: ComponentFramework.Context<IInputs>, entityName?: string, id?: string) => {
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<unknown | undefined>(undefined);
+    const [error, setError] = useState<any>(undefined);
     const [nodes, setNodes] = useState<Node[]>([]);
     const [edges, setEdges] = useState<Edge[]>([]);
     const [forms, setForms] = useState<Form[]>([]);
@@ -33,13 +33,13 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
             setActiveForm(activeForm);
 
             if(!activeForm)
-                return;
+                throw Error(context.resources.getString("error-selecting-form"));
 
             const columns = generateColumns(forms);
             const { nodes, edges } = await fetchHierarchy(relationship, metadata, columns)
             setNodes(nodes);
             setEdges(edges);
-        } catch (e: unknown) {
+        } catch (e: any) {
             setError(e);
         } finally {
             setIsLoading(false);
@@ -49,7 +49,7 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
     const fetchAttributes = async (): Promise <EntityDefinition[]> => {
         const query = `api/data/v9.1/EntityDefinitions(LogicalName='${entityName}')/Attributes?$select=LogicalName,AttributeType,DisplayName&$filter=AttributeOf eq null&$orderby=DisplayName asc`;
         const result = (await xrmService.fetch(query)) as EntityDefinition[];
-        return result
+        return result;
 }
 
     const fetchQuickViewForms = async (relationship: RelationshipInfo, attributes: EntityDefinition[], metadata: EntityMetadata): Promise<Form[]> => {
@@ -77,7 +77,7 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
                 .find((rel) => rel.IsHierarchical);
 
         if (!hierarchicalRelationship) 
-            throw new Error("Hierarchical relationship not found.");
+            throw new Error(context.resources.getString("error-hierarchical-relationship"));
 
         return [metadata, hierarchicalRelationship ?? null];
     }
