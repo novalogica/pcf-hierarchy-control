@@ -3,7 +3,7 @@
   <control 
     namespace="nl" 
     constructor="HierarchyPCFControl" 
-    version="0.0.1" 
+    version="1.0.0" 
     display-name-key="Hierarchy PCF Control" 
     description-key="HierarchyPCFControl description" 
     control-type="standard" 
