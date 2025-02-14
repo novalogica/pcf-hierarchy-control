@@ -27,10 +27,10 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
         setNodes([...layoutedNodes]);
         setEdges([...layoutedEdges]);
 
-        const node = layoutedNodes.find((n) => n.id === entityId);
+        const node = layoutedNodes.find((n) => n.id === (selectedNode?.id ?? entityId));
         
         if(node) {
-            const path = findPath(entityId, edges);
+            const path = findPath(node.id, edges);
             setSelectedPath(path);
             setTimeout(() => setCenter(node.position.x, node.position.y, { zoom: 0.75, duration: 500 }), 500);
         }
