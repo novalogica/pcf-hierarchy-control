@@ -1,5 +1,6 @@
 import { Column, EntityMetadata, Form, RelationshipInfo } from "../interfaces/entity";
 import EntityDefinition from "../interfaces/entity/definition";
+import { defaultColumns } from "./constants";
 
 const extractColumns = (cardXml: string, relationship: RelationshipInfo, attributes: EntityDefinition[], metadata: EntityMetadata): Column[] => {
   const parser = new DOMParser();
@@ -38,6 +39,7 @@ const extractColumns = (cardXml: string, relationship: RelationshipInfo, attribu
       logicalName: `_${relationship.ReferencingAttribute}_value`,
       displayName: relationship.ReferencingAttribute,
     },
+    ...defaultColumns
   ];
 
   const primaryKeyColumn: Column = {

@@ -102,14 +102,14 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
             `?$filter=(Microsoft.Dynamics.CRM.Above(PropertyName='${ReferencedAttribute}',PropertyValue='${id}') and _${ReferencingAttribute}_value eq null)&$select=${columns}`
         );
 
-        const topParent = parentResult.entities[0];
+        const topParent = parentResult.entities && parentResult.entities.length > 0 ? parentResult.entities[0][ReferencedAttribute] : id;
 
         const result = await context.webAPI.retrieveMultipleRecords(
             entityName!,
-            `?$filter=Microsoft.Dynamics.CRM.UnderOrEqual(PropertyName='${ReferencedAttribute}',PropertyValue='${topParent[ReferencedAttribute]}')&$select=${columns}`
+            `?$filter=Microsoft.Dynamics.CRM.UnderOrEqual(PropertyName='${ReferencedAttribute}',PropertyValue='${topParent}')&$select=${columns}`
         );
 
-        return transformEntityToNodes(result.entities, relationship, metadata._entityDescriptor.PrimaryNameAttribute);
+        return transformEntityToNodes(result.entities, columnList, relationship, metadata._entityDescriptor.PrimaryNameAttribute);
     }
 
     return {

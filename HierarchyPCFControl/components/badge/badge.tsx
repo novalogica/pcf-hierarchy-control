@@ -9,23 +9,24 @@ import { getColorFromInitials } from "../../utils/utils";
 interface IProps {
   name: string,
   size?: PersonaSize,
-  isCollapsed?: boolean
+  isCollapsed?: boolean,
+  nameStyle?: React.CSSProperties
 }
 
-export const Badge = ({ name, isCollapsed, size = PersonaSize.size40 }: IProps) => {
+export const Badge = ({ name, isCollapsed, size = PersonaSize.size40, nameStyle }: IProps) => {
 
   const initials = useMemo(() => getInitials(name, false), [name])
 
   return (
     <div style={styles.badgeContainer}>
         <Persona
-          text={name}
+          text={isCollapsed ? "" : name}
           size={size}
           imageInitials={initials}
           initialsColor={getColorFromInitials(initials, badgeColors)}
           onRenderPrimaryText={(props?: IPersonaProps) => {
             return isCollapsed ? <></> : (
-              <Text style={{...styles.badgeName, display: isCollapsed ? 'none': 'flex'}} variant="medium" nowrap block>
+              <Text style={{...styles.badgeName, display: isCollapsed ? 'none': 'flex', ...nameStyle}} variant="medium" nowrap block>
                 {props?.text}
               </Text>
             )

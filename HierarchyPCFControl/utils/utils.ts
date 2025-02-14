@@ -11,7 +11,7 @@ export const findPath = (nodeId: string, edges: Edge[]): string[] => {
 
 export const getNodeColor = (node: Node, selectedPath: string[]): string => {
     if (selectedPath?.includes(node.id) && selectedPath?.[selectedPath.length - 1] != node.id) 
-        return colors.active25;
+        return colors.active75;
     if (selectedPath?.[selectedPath.length - 1] == node.id) 
         return colors.active85;
     return colors.inactive;

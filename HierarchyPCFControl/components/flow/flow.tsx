@@ -12,7 +12,7 @@ import { getNodeColor } from "../../utils/utils";
 
 interface IProps {
     initialNodes: Node[],
-    initialEdges: Edge[]
+    initialEdges: Edge[],
 }
 
 const Flow = ({ initialNodes, initialEdges }: IProps) => {
@@ -35,7 +35,7 @@ const Flow = ({ initialNodes, initialEdges }: IProps) => {
                 ...edge,
                 style: {
                     stroke: isInPath && selectedPath.length > 0 ? colors.active85 : colors.inactive,
-                    strokeWidth: isInPath ? 3 : 1,
+                    strokeWidth: isInPath ? 4 : 2,
                 },
             };
         });
@@ -58,9 +58,12 @@ const Flow = ({ initialNodes, initialEdges }: IProps) => {
                     onEdgesChange={onEdgesChange}
                     fitView
                 >
-                    <MiniMap zoomable pannable position="top-right" nodeColor={(node) => getNodeColor(node, selectedPath)} nodeBorderRadius={16} />
+                    <MiniMap pannable position="top-right" nodeColor={(node) => getNodeColor(node, selectedPath)} nodeBorderRadius={16} />
                     <Controls position="bottom-right" showInteractive={false} />
                     <Background gap={16} />
+                    <Panel position="top-right">
+                        <SidePanel />
+                    </Panel>
                 </ReactFlow>
                 <SidePanel />
             </div>
