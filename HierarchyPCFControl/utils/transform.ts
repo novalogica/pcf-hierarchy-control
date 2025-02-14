@@ -1,9 +1,10 @@
 import { type Node, type Edge, Position } from '@xyflow/react';
 
 import { Column, RelationshipInfo } from '../interfaces/entity';
+import { findPath } from './utils';
 
-export const transformEntityToNodes = (data: ComponentFramework.WebApi.Entity[], columns: Column[], relationship: RelationshipInfo, primaryNameAttribute: string) => {
-  const nodes: Node[] = [];
+export const transformEntityToNodes = (currentRecordId: string, data: ComponentFramework.WebApi.Entity[], columns: Column[], relationship: RelationshipInfo, primaryNameAttribute: string) => {
+  let nodes: Node[] = [];
   const edges: Edge[] = [];
 
   data.forEach((item) => {
@@ -12,7 +13,6 @@ export const transformEntityToNodes = (data: ComponentFramework.WebApi.Entity[],
 
     nodes.push({
       id: nodeId,
-      
       data: {
         label: item[primaryNameAttribute],
         expanded: true,
@@ -34,6 +34,10 @@ export const transformEntityToNodes = (data: ComponentFramework.WebApi.Entity[],
     }
   });
 
+  if(nodes && nodes.length > 250) {
+    nodes = collapseHierarchyBasedOnNodesLength(currentRecordId, nodes, edges);
+  }
+    
   return { nodes, edges };
 }
 
@@ -68,3 +72,27 @@ export const createAttributeList = (entity: any, columns: any[], referencedAttri
 
       return acc;
 }, {} as Record<string, { displayName: string; value?: string | number | boolean | ComponentFramework.LookupValue | null }>);
+
+const collapseHierarchyBasedOnNodesLength = (currentRecordId: string, nodes: Node[], edges: Edge[]): Node[] => {
+  const path = findPath(currentRecordId, edges);
+  const visibleNodes = new Set<string>(path);
+
+  nodes.forEach((node) => {
+    if (path.includes(node.id) && node.data.parentId) {
+      nodes.forEach((sibling) => {
+        if (sibling.data.parentId === node.data.parentId) {
+          visibleNodes.add(sibling.id);
+        }
+      });
+    }
+  });
+
+  return nodes.map((n) => ({
+    ...n,
+    hidden: !visibleNodes.has(n.id),
+    data: {
+      ...n.data,
+      expanded: visibleNodes.has(n.id) && path.includes(n.id),
+    },
+  }));
+};

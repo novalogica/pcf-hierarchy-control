@@ -9,38 +9,6 @@ import { ControlContext } from "../context/control-context";
 
 const dagreGraph = new graphlib.Graph().setDefaultEdgeLabel(() => ({}));
 
-const getLayoutedElements = (nodes: Node[], edges: Edge[], direction: string) => {
-    const isHorizontal = direction === 'LR';
-    dagreGraph.setGraph({ rankdir: direction });
-
-    nodes.forEach((node) => {
-        dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
-    });
-
-    edges.forEach((edge) => {
-        dagreGraph.setEdge(edge.source, edge.target);
-    });
-
-    layout(dagreGraph);
-
-    const newNodes = nodes.map((node) => {
-        const nodeWithPosition = dagreGraph.node(node.id);
-        const newNode = {
-        ...node,
-        targetPosition: isHorizontal ? 'left' : 'top',
-        sourcePosition: isHorizontal ? 'right' : 'bottom',
-        position: {
-            x: nodeWithPosition.x - nodeWidth / 2,
-            y: nodeWithPosition.y - nodeHeight / 2,
-        },
-        };
-    
-        return newNode;
-    });
-
-    return { nodes: newNodes, edges };
-};
-
 export default function useTree(initialNodes: Node[], initialEdges: Edge[], direction: string) {
     const { entityId } = useContext(ControlContext);
     const { getZoom, setCenter } = useReactFlow();
@@ -55,7 +23,7 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
     useEffect(() => onLayout(direction), [initialNodes, initialEdges, direction]);
 
     const onLayout = useCallback((direction) => {
-        const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(nodes, edges, direction);
+        const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements();
         setNodes([...layoutedNodes]);
         setEdges([...layoutedEdges]);
 
@@ -64,7 +32,7 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
         if(node) {
             const path = findPath(entityId, edges);
             setSelectedPath(path);
-            setTimeout(() => setCenter(node.position.x, node.position.y, { zoom: 0.75, duration: 450 }), 750);
+            setTimeout(() => setCenter(node.position.x, node.position.y, { zoom: 0.75, duration: 750 }), 1000);
         }
     }, [entityId, nodes, edges]);
 
@@ -81,8 +49,40 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
         const nodeCenterX = node.position.x;
         const nodeCenterY = node.position.y;
 
-        setCenter(nodeCenterX, nodeCenterY, { zoom: currentZoom, duration: 450 });
+        setCenter(nodeCenterX, nodeCenterY, { zoom: currentZoom, duration: 750 });
     }, [getZoom, setCenter, nodes]);
+
+    const getLayoutedElements = useCallback(() => {
+        const isHorizontal = direction === 'LR';
+        dagreGraph.setGraph({ rankdir: direction });
+    
+        nodes.forEach((node) => {
+            dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
+        });
+    
+        edges.forEach((edge) => {
+            dagreGraph.setEdge(edge.source, edge.target);
+        });
+    
+        layout(dagreGraph);
+    
+        const newNodes = nodes.map((node) => {
+            const nodeWithPosition = dagreGraph.node(node.id);
+            const newNode = {
+            ...node,
+            targetPosition: isHorizontal ? 'left' : 'top',
+            sourcePosition: isHorizontal ? 'right' : 'bottom',
+            position: {
+                x: nodeWithPosition.x - nodeWidth / 2,
+                y: nodeWithPosition.y - nodeHeight / 2,
+            },
+            };
+        
+            return newNode;
+        });
+    
+        return { nodes: newNodes, edges };
+    }, [nodes, edges, direction]);
 
     const getChildrenIds = useCallback((nodeId: string) => {
         return edges
@@ -116,7 +116,7 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
                 }
                 return n;
             });
-    
+
             const toggleDescendantsVisibility = (parentId: string, isVisible: boolean) => {
                 const descendants = getAllDescendantIds(parentId);
 
@@ -135,15 +135,15 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
                     }
                 });
             };
-    
+
             const node = updatedNodes.find((n) => n.id === nodeId);
             if (node) {
                 toggleDescendantsVisibility(nodeId, node.data.expanded as boolean);
             }
-    
             return updatedNodes;
         });
     }, [nodes, edges, getChildrenIds, moveToNode]);
+    
 
     return {
         nodes,

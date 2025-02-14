@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
   <control 
-    namespace="nl" 
+    namespace="novalogica" 
     constructor="HierarchyPCFControl" 
     version="1.0.0" 
-    display-name-key="Hierarchy PCF Control" 
+    display-name-key="Hierarchy Control" 
     description-key="HierarchyPCFControl description" 
     control-type="standard" 
   >

@@ -99,7 +99,7 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
             `?$filter=Microsoft.Dynamics.CRM.UnderOrEqual(PropertyName='${ReferencedAttribute}',PropertyValue='${topParent}')&$select=${columns}`
         );
 
-        return transformEntityToNodes(result.entities, columnList, relationship, metadata._entityDescriptor.PrimaryNameAttribute);
+        return transformEntityToNodes(id!, result.entities, columnList, relationship, metadata._entityDescriptor.PrimaryNameAttribute);
     }
 
     return {
