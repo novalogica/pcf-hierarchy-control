@@ -1,6 +1,5 @@
 import { createContext } from "react";
-import { Node } from "@xyflow/react/dist/esm/types/nodes";
-import { Edge } from "@xyflow/react/dist/esm/types/edges";
+import { Node, Edge } from "@xyflow/react/dist/esm/types";
 
 interface IFlowContext {
     nodes: Node[],

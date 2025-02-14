@@ -1,12 +1,11 @@
 import { useMemo, useState, useEffect } from "react";
+import { Node, Edge } from "@xyflow/react/dist/esm/types";
 import { IInputs } from "../generated/ManifestTypes"
-import EntityDefinition from "../interfaces/entity/definition";
-import { XrmService } from "./service";
-import { Column, EntityMetadata, Form, RelationshipInfo } from "../interfaces/entity";
-import { Node } from "@xyflow/react/dist/esm/types/nodes";
-import { Edge } from "@xyflow/react/dist/esm/types/edges";
-import { transformEntityToNodes } from "../utils/transform";
+
+import { Column, EntityMetadata, Form, RelationshipInfo, EntityDefinition } from "../interfaces/entity";
 import { extractColumns, generateColumns } from "../utils/form";
+import { transformEntityToNodes } from "../utils/transform";
+import { XrmService } from "./service";
 
 export const useDataverse = (context: ComponentFramework.Context<IInputs>, entityName?: string, id?: string) => {
     const [isLoading, setIsLoading] = useState(true);

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="loading-message" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="collapse" xml:space="preserve">
+    <value>Collapse</value>
+  </data>
+  <data name="expand" xml:space="preserve">
+    <value>Expand</value>
+  </data>
+  <data name="open-record" xml:space="preserve">
+    <value>Open</value>
+  </data>
+</root>

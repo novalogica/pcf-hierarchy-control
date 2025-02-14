@@ -1,11 +1,11 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { useEdgesState, useNodesState, useReactFlow } from "@xyflow/react";
-import { Node } from "@xyflow/react/dist/esm/types/nodes";
-import { Edge } from "@xyflow/react/dist/esm/types/edges";
-import { findPath } from "../utils/utils";
 import { layout, graphlib } from '@dagrejs/dagre';
-import { nodeHeight, nodeWidth } from "../utils/constants";
+import { useEdgesState, useNodesState, useReactFlow } from "@xyflow/react";
+import { Node, Edge } from "@xyflow/react/dist/esm/types";
+
 import { ControlContext } from "../context/control-context";
+import { nodeHeight, nodeWidth } from "../utils/constants";
+import { findPath } from "../utils/utils";
 
 const dagreGraph = new graphlib.Graph().setDefaultEdgeLabel(() => ({}));
 

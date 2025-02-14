@@ -19,7 +19,28 @@
     
     <resources>
       <code path="index.ts" order="1"/>
+      <!-- Arabic -->
+      <resx path="strings/HierarchyPCFControl.1025.resx" version="1.0.0" />
+      <!-- German -->
+      <resx path="strings/HierarchyPCFControl.1031.resx" version="1.0.0" />
+      <!-- English -->
       <resx path="strings/HierarchyPCFControl.1033.resx" version="1.0.0" />
+      <!-- French -->
+      <resx path="strings/HierarchyPCFControl.1036.resx" version="1.0.0" />
+      <!-- Italian -->
+      <resx path="strings/HierarchyPCFControl.1040.resx" version="1.0.0" />
+      <!-- Japanese -->
+      <resx path="strings/HierarchyPCFControl.1041.resx" version="1.0.0" />
+      <!-- Dutch -->
+      <resx path="strings/HierarchyPCFControl.1043.resx" version="1.0.0" />
+      <!-- Portuguese (Brazil) -->
+      <resx path="strings/HierarchyPCFControl.1046.resx" version="1.0.0" />
+      <!-- Chinese (Simplified) -->
+      <resx path="strings/HierarchyPCFControl.2052.resx" version="1.0.0" />
+      <!-- Portuguese (Portugal) -->
+      <resx path="strings/HierarchyPCFControl.2070.resx" version="1.0.0" />
+      <!-- Spanish -->
+      <resx path="strings/HierarchyPCFControl.3082.resx" version="1.0.0" />
     </resources>
     <feature-usage>
       <uses-feature name="Utility" required="true" />
