@@ -1,5 +1,4 @@
-import { type Node, type Edge } from '@xyflow/react';
-
+import { Edge, Node } from "@xyflow/react/dist/esm/types";
 import { Column, RelationshipInfo } from '../interfaces/entity';
 import { findPath } from './utils';
 import { nodeLengthLimit } from './constants';

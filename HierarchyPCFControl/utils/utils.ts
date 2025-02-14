@@ -1,6 +1,7 @@
-import { type Edge, type Node } from '@xyflow/react';
-import { colors } from './constants';
+import { Edge, Node } from "@xyflow/react/dist/esm/types";
 import { PersonaInitialsColor } from '@fluentui/react/lib/Persona';
+
+import { colors } from './constants';
 
 export const findPath = (nodeId: string, edges: Edge[]): string[] => {
     return edges.reduce((path, _) => {

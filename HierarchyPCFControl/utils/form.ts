@@ -1,5 +1,4 @@
-import { Column, EntityMetadata, Form, RelationshipInfo } from "../interfaces/entity";
-import EntityDefinition from "../interfaces/entity/definition";
+import { Column, EntityMetadata, Form, RelationshipInfo, EntityDefinition } from "../interfaces/entity";
 import { defaultColumns } from "./constants";
 
 const extractColumns = (cardXml: string, relationship: RelationshipInfo, attributes: EntityDefinition[], metadata: EntityMetadata): Column[] => {
