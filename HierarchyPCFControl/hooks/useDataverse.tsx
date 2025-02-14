@@ -14,7 +14,6 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
     const [nodes, setNodes] = useState<Node[]>([]);
     const [edges, setEdges] = useState<Edge[]>([]);
     const [forms, setForms] = useState<Form[]>([]);
-    const [columns, setColumns] = useState<Column[]>([]);
     const [activeForm, setActiveForm] = useState<Form | undefined>(undefined);
 
     const xrmService = useMemo(() => XrmService.getInstance(), [context]);
@@ -38,8 +37,6 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
                 return;
 
             const columns = generateColumns(forms);
-            setColumns(columns);
-
             const { nodes, edges } = await fetchHierarchy(relationship, metadata, columns)
             setNodes(nodes);
             setEdges(edges);

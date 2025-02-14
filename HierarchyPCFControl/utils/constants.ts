@@ -1,5 +1,4 @@
 import { PersonaInitialsColor } from "@fluentui/react/lib/Persona";
-import { Position, HandleType } from "@xyflow/react";
 import { Column } from "../interfaces/entity";
 
 const nodeWidth = 550;
@@ -15,17 +14,6 @@ const colors = {
   secondaryBackground: 'rgb(240, 240, 240, 0.3)',
   badgeColor: '#424b54'
 }
-
-const handles: { type: HandleType, position: Position}[] = [
-  {
-    type: 'source',
-    position: Position.Bottom
-  },
-  {
-    type: 'target',
-    position: Position.Top
-  }
-]
 
 const badgeColors = [
   PersonaInitialsColor.lightBlue,
@@ -63,7 +51,6 @@ export {
   nodeWidth,
   nodeHeight,
   colors,
-  handles,
   badgeColors,
   defaultColumns
 }

@@ -5,6 +5,8 @@ import { Edge } from "@xyflow/react/dist/esm/types/edges";
 interface IFlowContext {
     nodes: Node[],
     edges: Edge[],
+    direction: string,
+    setDirection: React.Dispatch<React.SetStateAction<string>>
     selectedPath: string[],
     selectedNode?: Node,
     moveToNode: (nodeId: string) => void,

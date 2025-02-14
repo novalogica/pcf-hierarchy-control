@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ReactFlow, MiniMap, Controls, Background, ConnectionLineType, Panel } from "@xyflow/react";
 import { Node } from "@xyflow/react/dist/esm/types/nodes";
 import { Edge } from "@xyflow/react/dist/esm/types/edges";
@@ -16,6 +16,7 @@ interface IProps {
 }
 
 const Flow = ({ initialNodes, initialEdges }: IProps) => {
+    const [direction, setDirection] = useState('TB');
     const { 
         nodes, 
         edges, 
@@ -26,7 +27,7 @@ const Flow = ({ initialNodes, initialEdges }: IProps) => {
         getChildrenIds, 
         onNodesChange, 
         onEdgesChange 
-    } = useTree(initialNodes, initialEdges);
+    } = useTree(initialNodes, initialEdges, direction);
 
     const edgeList = useMemo(() => {
         return edges.map((edge) => {
@@ -44,7 +45,7 @@ const Flow = ({ initialNodes, initialEdges }: IProps) => {
     const nodeList = useMemo(() => nodes.filter((node) => !node.hidden), [nodes]);
 
     return (
-        <FlowContext.Provider value={{nodes, edges, selectedPath, selectedNode, moveToNode, onExpandNode, getChildrenIds}}>
+        <FlowContext.Provider value={{nodes, edges, selectedPath, selectedNode, moveToNode, onExpandNode, getChildrenIds, direction, setDirection}}>
             <div style={styles.main}>
                 <ReactFlow
                     nodes={nodeList}
@@ -61,7 +62,7 @@ const Flow = ({ initialNodes, initialEdges }: IProps) => {
                     <MiniMap pannable position="top-right" nodeColor={(node) => getNodeColor(node, selectedPath)} nodeBorderRadius={16} />
                     <Controls position="bottom-right" showInteractive={false} />
                     <Background gap={16} />
-                    <Panel position="top-right">
+                    <Panel position="top-left" style={styles.panel}>
                         <SidePanel />
                     </Panel>
                 </ReactFlow>
@@ -78,4 +79,7 @@ const styles: Record<string, React.CSSProperties> = {
         width: "100%",
         height: "95vh",
     },
+    panel: {
+        bottom: 32
+    }
 };

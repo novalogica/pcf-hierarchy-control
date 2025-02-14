@@ -10,12 +10,7 @@ export const useNavigation = (context: ComponentFramework.Context<IInputs>) => {
         }
 
         //@ts-expect-error - Method does not exist in PCF SDK however it should be use to maintain control state alive
-        await context.navigation.navigateTo(pageInput, {
-            height: {value: 85, unit:"%"},
-            width: {value: 90, unit:"%"}, 
-            target: 2,  
-            position: 1
-        });
+        await context.navigation.navigateTo(pageInput, { target: 1, position: 1 });
     }
 
     return {

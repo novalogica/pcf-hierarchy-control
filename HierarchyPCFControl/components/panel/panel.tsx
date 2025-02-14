@@ -1,25 +1,55 @@
 import * as React from "react";
-import { useMemo, useState } from "react";
-import { IconButton } from "@fluentui/react/lib/Button";
+import { useCallback, useContext, useMemo, useState } from "react";
+import { ActionButton, IconButton } from "@fluentui/react/lib/Button";
 import NodeTree from "./tree";
 import { colors } from "../../utils/constants";
+import { ControlContext } from "../../context/control-context";
+import { Dropdown, IDropdownOption } from "@fluentui/react/lib/Dropdown";
+import { FlowContext } from "../../context/flow-context";
 
 const SidePanel = () => {
+  const { forms, activeForm, setActiveForm } = useContext(ControlContext);
+  const { direction, setDirection } = useContext(FlowContext);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const panelWidth = useMemo(() => isCollapsed ? 90 : 275, [isCollapsed])
   const menuIcon = useMemo(() => isCollapsed ? "OpenPaneMirrored": "OpenPane", [isCollapsed])
   
+  const onFormChanged = useCallback((_: React.FormEvent<HTMLDivElement>, item?: IDropdownOption): void => {
+    if(!item)
+        return;
+
+    const form = forms.find((f) => f.formId == item.key);
+    form && setActiveForm(form);
+  }, [forms, activeForm]);
+
+  const formOptions = useMemo(() => forms.map((f) => ({ key: f.formId, text: f.label } as IDropdownOption)), [forms])
+
   return (
     <div style={{...styles.toolbar, width: panelWidth, alignItems: isCollapsed ? 'center': 'start'}}>
-      <IconButton
-        style={{...styles.toolbarItem, width: 'auto'}}
-        aria-label={"Collapse"}
+      <ActionButton 
+        style={{...styles.toolbarItem, width: 'auto'}} 
         onClick={() => setIsCollapsed(prev => !prev)}
         iconProps={{ iconName: menuIcon }}
+      >
+        {!isCollapsed && "Collapse"}
+      </ActionButton>
+      <Dropdown
+        placeholder="Select a form"
+        selectedKey={activeForm ? activeForm.formId : undefined}
+        onChange={onFormChanged}
+        options={formOptions}
+        styles={{root: { width: '100%' }, title: { border: "none" }, callout: { borderRadius: "0px 0px 16px 16px", minWidth: 'fit-content' }}}
       />
       <div style={{...styles.treeContainer, overflowY: 'auto', overflowX: isCollapsed ? 'hidden': 'auto'}}>
         <NodeTree isCollapsed={isCollapsed}/>
       </div>
+      <ActionButton 
+        style={{...styles.toolbarItem, width: 'auto'}} 
+        onClick={() => setDirection(prev => prev == "TB" ? "LR" : "TB")}
+        iconProps={{ iconName: direction == "TB" ? "HorizontalTabKey": "DistributeDown" }}
+      >
+        {isCollapsed ? "" : direction == "TB" ? "Horizontal" : "Vertical"}
+      </ActionButton>
     </div>
   );
 }
@@ -31,15 +61,12 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     flexDirection: 'column',
     gap: 24,
-    position: 'absolute',
-    top: 16,
-    left: 16,
-    bottom: 16,
     padding: 16,
     backgroundColor: 'white',
     borderRadius: 8,
     boxShadow: '0px 10px 15px -3px rgba(0,0,0,0.1)',
     alignItems: 'center',
+    height: '100%'
   },
   toolbarItem: {
     width: '100%',

@@ -9,7 +9,7 @@ import { ControlContext } from "../context/control-context";
 
 const dagreGraph = new graphlib.Graph().setDefaultEdgeLabel(() => ({}));
 
-const getLayoutedElements = (nodes: Node[], edges: Edge[], direction = 'TB') => {
+const getLayoutedElements = (nodes: Node[], edges: Edge[], direction: string) => {
     const isHorizontal = direction === 'LR';
     dagreGraph.setGraph({ rankdir: direction });
 
@@ -41,7 +41,7 @@ const getLayoutedElements = (nodes: Node[], edges: Edge[], direction = 'TB') => 
     return { nodes: newNodes, edges };
 };
 
-export default function useTree(initialNodes: Node[], initialEdges: Edge[], direction = 'TB') {
+export default function useTree(initialNodes: Node[], initialEdges: Edge[], direction: string) {
     const { entityId } = useContext(ControlContext);
     const { getZoom, setCenter } = useReactFlow();
     const [nodes, setNodes, onNodesChange] = useNodesState<any>(initialNodes);
@@ -52,7 +52,7 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
         return nodes?.find(n => n.id == selectedPath[selectedPath.length - 1]);
     }, [selectedPath])
 
-    useEffect(() => onLayout(direction), [initialNodes, initialEdges]);
+    useEffect(() => onLayout(direction), [initialNodes, initialEdges, direction]);
 
     const onLayout = useCallback((direction) => {
         const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(nodes, edges, direction);

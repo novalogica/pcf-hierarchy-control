@@ -20,7 +20,7 @@ export class HierarchyPCFControl implements ComponentFramework.StandardControl<I
         ReactDOM.render(React.createElement(App, { 
             context,
             entityName: contextInfo?.entityTypeName ?? params?.etn,
-            entityId: contextInfo?.id ?? params?.id
+            entityId: contextInfo?.entityId ?? params?.id
         }), this.container );
     }
 

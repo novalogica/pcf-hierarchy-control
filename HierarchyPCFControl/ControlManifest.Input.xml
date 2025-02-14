@@ -4,7 +4,7 @@
     namespace="nl" 
     constructor="HierarchyPCFControl" 
     version="0.0.1" 
-    display-name-key="HierarchyPCFControl" 
+    display-name-key="Hierarchy PCF Control" 
     description-key="HierarchyPCFControl description" 
     control-type="standard" 
   >
@@ -12,9 +12,9 @@
       name="column" 
       display-name-key="Column to be Attached" 
       description-key="" 
-      of-type="Multiple" 
+      of-type="SingleLine.Text" 
       usage="bound" 
-      required="false"
+      required="true"
     />
     
     <resources>

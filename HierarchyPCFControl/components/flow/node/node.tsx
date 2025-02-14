@@ -1,10 +1,10 @@
 import * as React from "react";
-import { Handle, type NodeProps } from '@xyflow/react';
+import { Handle, HandleType, Position, type NodeProps } from '@xyflow/react';
 import { Attribute, NodeRecord } from "../../../types/node";
 import { useContext, useMemo, useCallback, useRef } from "react";
 import { FlowContext } from "../../../context/flow-context";
 import NodeExpandButton from "./expand-node";
-import { colors, handles, nodeHeight, nodeWidth } from "../../../utils/constants";
+import { colors, nodeHeight, nodeWidth } from "../../../utils/constants";
 import { PersonaSize } from "@fluentui/react/lib/Persona";
 import { Text } from "@fluentui/react/lib/Text";
 import { Badge } from "../../badge/badge";
@@ -15,8 +15,8 @@ import { ControlContext } from "../../../context/control-context";
 
 const NodeCard = React.memo((props: NodeProps<NodeRecord>) => {
   const { id, data } = props;
-  const { context, entityName, entityId } = useContext(ControlContext);
-  const { selectedNode, selectedPath, moveToNode, getChildrenIds } = useContext(FlowContext);
+  const { context, entityName, entityId, activeForm } = useContext(ControlContext);
+  const { selectedNode, moveToNode, getChildrenIds, direction } = useContext(FlowContext);
   const { openForm } = useNavigation(context)
   const detailRef = useRef<HTMLDivElement>(null);
 
@@ -40,7 +40,12 @@ const NodeCard = React.memo((props: NodeProps<NodeRecord>) => {
   }, [id]);
 
   const attributes = useMemo(() => {
-    return data.attributes ? Object.keys(data.attributes).filter(key => key != "_ownerid_value" && key != "statecode").map((key) => (
+    const filteredAttributes = !data.attributes || data.attributes.length < 0 
+          ? []
+          : Object.keys(data.attributes)
+            .filter(key => activeForm?.columns.some(c => c.logicalName == key) && key != "_ownerid_value" && key != "statecode")
+
+    return filteredAttributes.map((key) => (
         <div key={key} style={styles.info}>
           <Text style={styles.infoLabel} nowrap block>
             {data.attributes![key].displayName}
@@ -53,12 +58,23 @@ const NodeCard = React.memo((props: NodeProps<NodeRecord>) => {
             }
           </Text>
         </div>
-    )) : []
-  }, [data.attributes])  
+    ))
+  }, [activeForm, data.attributes])  
 
   const owner = useMemo(() => data.attributes!["_ownerid_value"].value as ComponentFramework.LookupValue, [data.attributes])
 
   const state = useMemo(() => data.attributes!["statecode"] as Attribute, [data.attributes])
+
+  const handles: { type: HandleType, position: Position}[] = useMemo(() => ([
+      {
+        type: 'source',
+        position: direction == "TB" ? Position.Bottom : Position.Right
+      },
+      {
+        type: 'target',
+        position: direction == "TB" ? Position.Top : Position.Left
+      }
+  ]), [direction]);
 
   return (
     <div style={cardStyle} onClick={handleCardClick}>
@@ -70,7 +86,7 @@ const NodeCard = React.memo((props: NodeProps<NodeRecord>) => {
         {attributes}
       </div>
       <div style={styles.footerContainer}>
-        <Badge name={owner.name} etn={owner.entityType} id={owner.id} size={PersonaSize.size32} nameStyle={styles.ownerText}/>
+        <Badge name={owner.name} etn={owner.entityType} id={owner.id} size={PersonaSize.size32} nameStyle={styles.ownerText} isClickable/>
         <IconButton text="Open" iconProps={{ iconName: 'ChevronRight' }} onClick={handleOpenRecord}/>
       </div>
       {hasChildrens && <NodeExpandButton {...props} />}      
@@ -90,7 +106,7 @@ const styles: { [key: string]: React.CSSProperties } = {
       height: nodeHeight - 100, 
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'start',
+      justifyContent: 'space-between',
       alignItems: 'center',
       padding: "1.5rem",
       backgroundColor: "white",
