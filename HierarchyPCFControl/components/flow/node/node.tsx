@@ -87,7 +87,7 @@ const NodeCard = React.memo((props: NodeProps<NodeRecord>) => {
       </div>
       <div style={styles.footerContainer}>
         <Badge name={owner.name} etn={owner.entityType} id={owner.id} size={PersonaSize.size32} nameStyle={styles.ownerText} isClickable/>
-        <IconButton text="Open" iconProps={{ iconName: 'ChevronRight' }} onClick={handleOpenRecord}/>
+        <IconButton text="Open" iconProps={{ iconName: 'OpenInNewWindow' }} onClick={handleOpenRecord}/>
       </div>
       {hasChildrens && <NodeExpandButton {...props} />}      
       {handles.map((handle) => (
@@ -155,7 +155,7 @@ const styles: { [key: string]: React.CSSProperties } = {
       gap: 16,
     },
     infoLabel: {
-      fontSize: "0.875rem",
+      fontSize: "14px",
       fontWeight: 500,
       color: "#6b7280",
       width: 150,

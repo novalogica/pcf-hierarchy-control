@@ -5,6 +5,7 @@ const nodeWidth = 550;
 const nodeHeight = 450;
 
 const colors = {
+  active25: 'rgba(65, 104, 189, 0.25)',
   active75: 'rgba(65, 104, 189, 0.75)',
   active85: 'rgba(65, 104, 189, 0.85)',
   black10: 'rgba(0,0,0,0.1)',
