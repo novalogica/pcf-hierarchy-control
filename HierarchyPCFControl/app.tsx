@@ -31,7 +31,7 @@ const App = ({ context, entityName, entityId }: IProps) => {
     if(isLoading && !error) {
         return (
             <div style={styles.boundaryContainer}>
-                <Spinner label={context.resources.getString("loading-message")} size={SpinnerSize.medium} />
+                <Spinner label={context.resources.getString("loading-message")} size={SpinnerSize.large} />
             </div>
         ) 
     }
