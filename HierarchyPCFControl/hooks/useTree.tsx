@@ -1,7 +1,9 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { Edge, Node, useEdgesState, useNodesState, useReactFlow } from "@xyflow/react";
+import { useEdgesState, useNodesState, useReactFlow } from "@xyflow/react";
+import { Node } from "@xyflow/react/dist/esm/types/nodes";
+import { Edge } from "@xyflow/react/dist/esm/types/edges";
 import { findPath } from "../utils/utils";
-import {layout, graphlib} from '@dagrejs/dagre';
+import { layout, graphlib } from '@dagrejs/dagre';
 import { nodeHeight, nodeWidth } from "../utils/constants";
 import { ControlContext } from "../context/control-context";
 
@@ -41,7 +43,7 @@ const getLayoutedElements = (nodes: Node[], edges: Edge[], direction = 'TB') => 
 
 export default function useTree(initialNodes: Node[], initialEdges: Edge[], direction = 'TB') {
     const { entityId } = useContext(ControlContext);
-    const { fitView, getZoom, setCenter } = useReactFlow();
+    const { getZoom, setCenter } = useReactFlow();
     const [nodes, setNodes, onNodesChange] = useNodesState<any>(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [selectedPath, setSelectedPath] = useState<string[]>([]);
@@ -122,11 +124,14 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
                     const descendantNode = updatedNodes.find((n) => n.id === id);
 
                     if (descendantNode) {
-                        descendantNode.hidden = isVisible && descendantNode.data.parentId == parentId 
-                            ? false 
-                            : isVisible && !descendantNode.data.parentId 
-                                ? true
-                                : !isVisible;
+                        const nodeVisibility = isVisible && descendantNode.data.parentId == parentId 
+                                            ? false 
+                                            : isVisible && descendantNode.data.parentId != parentId
+                                                ? true
+                                                : !isVisible;
+
+                        descendantNode.hidden = nodeVisibility,
+                        descendantNode.data = { ...descendantNode.data, expanded: nodeVisibility }
                     }
                 });
             };

@@ -16,27 +16,20 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
     const [forms, setForms] = useState<Form[]>([]);
     const [columns, setColumns] = useState<Column[]>([]);
     const [activeForm, setActiveForm] = useState<Form | undefined>(undefined);
-    const [relationship, setRelationship] = useState<RelationshipInfo | null>(null);
-    const [attributes, setAttributes] = useState<EntityDefinition[] | null>(null);
 
     const xrmService = useMemo(() => XrmService.getInstance(), [context]);
 
     useEffect(() => {
-        if(!entityName || !id)
-            return;
-
+        if(!entityName || !id) return;
         fetchData();
     }, [])
 
     const fetchData = async () => {
         try {
             const attributes = await fetchAttributes();
-            setAttributes(attributes);
-
             const [metadata, relationship] = await fetchEntityMetadata();
-            setRelationship(relationship);
-
             const forms = await fetchQuickViewForms(relationship, attributes, metadata);
+
             const activeForm = forms.find((f) => f.isActive == true);
             setForms(forms);
             setActiveForm(activeForm);
