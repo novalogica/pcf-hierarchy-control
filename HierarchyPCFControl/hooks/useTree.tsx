@@ -140,6 +140,7 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
             if (node) {
                 toggleDescendantsVisibility(nodeId, node.data.expanded as boolean);
             }
+
             return updatedNodes;
         });
     }, [nodes, edges, getChildrenIds, moveToNode]);

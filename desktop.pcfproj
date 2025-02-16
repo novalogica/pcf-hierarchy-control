@@ -11,6 +11,7 @@
     <Name>desktop</Name>
     <ProjectGuid>52abbbdf-a15d-4278-9869-cee58fe11a1e</ProjectGuid>
     <OutputPath>$(MSBuildThisFileDirectory)out\controls</OutputPath>
+    <PcfBuildMode>production</PcfBuildMode>
   </PropertyGroup>
 
   <PropertyGroup>

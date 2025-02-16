@@ -1,5 +1,5 @@
 import * as React from "react";
-import { memo, useMemo, useState } from "react";
+import { memo, useContext, useMemo, useState } from "react";
 import { ReactFlow, MiniMap, Controls, Background, ConnectionLineType, Panel } from "@xyflow/react";
 import { Node, Edge } from "@xyflow/react/dist/esm/types";
 
@@ -9,6 +9,7 @@ import { getNodeColor } from "../../utils/utils";
 import useTree from "../../hooks/useTree";
 import SidePanel from "../panel/panel";
 import NodeCard from "./node/node";
+import { ControlContext } from "../../context/control-context";
 
 interface IProps {
     initialNodes: Node[],
@@ -16,6 +17,7 @@ interface IProps {
 }
 
 const Flow = memo(({ initialNodes, initialEdges }: IProps) => {
+    const { context } = useContext(ControlContext);
     const [direction, setDirection] = useState('TB');
     const { 
         nodes, 
@@ -44,9 +46,15 @@ const Flow = memo(({ initialNodes, initialEdges }: IProps) => {
 
     const nodeList = useMemo(() => nodes.filter((node) => !node.hidden), [nodes]);
 
+    const dimensions = useMemo(() => ({ 
+        width: context.mode.allocatedWidth == -1 ? '100%': context.mode.allocatedWidth, 
+        height: context.mode.allocatedHeight  == -1 ? '95vh': context.mode.allocatedHeight
+    }), [context.mode])
+
+
     return (
         <FlowContext.Provider value={{nodes, edges, selectedPath, selectedNode, moveToNode, onExpandNode, getChildrenIds, direction, setDirection}}>
-            <div style={styles.main}>
+            <div style={dimensions}>
                 <ReactFlow
                     nodes={nodeList}
                     edges={edgeList}
@@ -70,7 +78,7 @@ const Flow = memo(({ initialNodes, initialEdges }: IProps) => {
                         showFitView={initialNodes && initialNodes.length <= nodeLengthLimit} 
                     />
                     <Background gap={16} />
-                    <Panel position="top-left" style={styles.panel}>
+                    <Panel position="top-left" style={{...styles.panel, height: context.mode.allocatedHeight }}>
                         <SidePanel />
                     </Panel>
                 </ReactFlow>
@@ -83,10 +91,6 @@ Flow.displayName = "Flow"
 export default Flow;
 
 const styles: Record<string, React.CSSProperties> = {
-    main: {
-        width: "100%",
-        height: "95vh",
-    },
     panel: {
         bottom: 32
     }

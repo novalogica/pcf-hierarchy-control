@@ -44,7 +44,6 @@ const NodeTree = memo(({ isCollapsed }: IProps) => {
     ev?.preventDefault();
 
     if ((ev?.target as HTMLElement).closest('.ms-Nav-chevron')) {
-      moveToNode(item?.key as string)
       onExpandNode(item?.key as string);
     }
   }, [])
