@@ -1,6 +1,6 @@
 # Hierarchy Control
 
-| ![Hierarchy Control](https://github.com/novalogica/pcf-hierarchy-control/blob/main/screenshots/pcf-hierarchy-control.png?raw=true) |
+| ![Hierarchy Control](https://github.com/novalogica/pcf-hierarchy-control/blob/main/screenshots/pcf-hierarchy-control.jpg?raw=true) |
 |:--:|
 | *Figure 1: Hierarchy Control displaying a sample hierarchy.* |
 
@@ -21,7 +21,13 @@ This **PowerApps Component Framework (PCF)** control is designed to replace the 
 ### **Dynamic Node Cards**
 - Node cards are dynamically generated based on the selected fields from the form.
 - Users can expand or collapse nodes to show or hide child nodes, making it easier to navigate complex hierarchies.
-- Cards can display multiple fields, providing a comprehensive overview of each node.
+
+## 📷 Screenshots
+
+| ![Dynamic Cards](https://github.com/novalogica/pcf-hierarchy-control/blob/main/screenshots/pcf-hierarchy-large-structure.jpg?raw=true) |
+|:--:|
+| *Figure 2: Cards can display multiple fields, providing a comprehensive overview of each node* |
+
 
 ### **Side Panel with Tree View**
 - The side panel provides a tree view of the hierarchy, allowing users to quickly navigate and locate specific nodes.
@@ -47,7 +53,7 @@ This **PowerApps Component Framework (PCF)** control is designed to replace the 
 
 | ![Hierarchy Indicator](https://github.com/novalogica/pcf-hierarchy-control/blob/main/screenshots/pa-hierarchy-grid-control.png?raw=true) |
 |:--:|
-| *Figure 2: Hierarchy Indicator control displaying hierarchy indicator for all account records.* |
+| *Figure 3: Hierarchy Indicator control displaying hierarchy indicator for all account records.* |
 
 If you want to maintain the legacy feature of checking if a record has a hierarchy and opening it within the view, providing a seamless transition for users, you can add this bundled control to the entity views.
 
@@ -61,7 +67,7 @@ If you want to maintain the legacy feature of checking if a record has a hierarc
 
 | ![Hierarchy Indicator](https://github.com/novalogica/pcf-hierarchy-control/blob/main/screenshots/pcf-hierarchy-grid-configuration.png?raw=true) |
 |:--:|
-| *Figure 3: Hierarchy indicator control configuration* |
+| *Figure 4: Hierarchy indicator control configuration* |
 
 ### Is the Hierarchy Indicator Control mandatory?
 No, this control is completely optional. If you only need the main hierarchy control, you can open it directly using a **pageType=Control** URL, similar to how the deprecated Microsoft control functioned.
@@ -102,7 +108,7 @@ Xrm.Navigation.navigateTo(paneInput, navigationOptions).then(
 
 ## 📷 Screenshots
 
-| ![Hierarchy structure](https://github.com/novalogica/pcf-hierarchy-control/blob/main/screenshots/pcf-hierarchy-large-structure.png?raw=true) |
+| ![Hierarchy structure](https://github.com/novalogica/pcf-hierarchy-control/blob/main/screenshots/pcf-hierarchy-large-structure.jpg?raw=true) |
 |:--:|
 | *Figure 4: Hierarchy control displaying a hierarchy with 150+ accounts.* |
 
