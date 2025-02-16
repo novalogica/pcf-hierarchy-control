@@ -104,19 +104,6 @@ Xrm.Navigation.navigateTo(paneInput, navigationOptions).then(
 
 ---
 
-## 📷 Screenshots
-
-| ![Hierarchy structure](https://github.com/novalogica/pcf-hierarchy-control/blob/main/screenshots/pcf-hierarchy-large-structure.jpg?raw=true) |
-|:--:|
-| *Figure 5: Hierarchy control displaying a hierarchy with 150+ accounts.* |
-
----
-
-## 📷 TODO
-
-1. Add localized translations for most used languages
-
----
 
 ## Contributions
 Contributions to improve or enhance this control are welcome. If you encounter issues or have feature requests, please create an issue or submit a pull request in the repository.
