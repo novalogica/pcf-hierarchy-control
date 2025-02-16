@@ -22,9 +22,7 @@ This **PowerApps Component Framework (PCF)** control is designed to replace the 
 - Node cards are dynamically generated based on the selected fields from the form.
 - Users can expand or collapse nodes to show or hide child nodes, making it easier to navigate complex hierarchies.
 
-## 📷 Screenshots
-
-| ![Dynamic Cards](https://github.com/novalogica/pcf-hierarchy-control/blob/main/screenshots/pcf-hierarchy-large-structure.jpg?raw=true) |
+| ![Dynamic Cards](https://github.com/novalogica/pcf-hierarchy-control/blob/main/screenshots/pcf-hierarchy-card.jpg?raw=true) |
 |:--:|
 | *Figure 2: Cards can display multiple fields, providing a comprehensive overview of each node* |
 
@@ -110,7 +108,7 @@ Xrm.Navigation.navigateTo(paneInput, navigationOptions).then(
 
 | ![Hierarchy structure](https://github.com/novalogica/pcf-hierarchy-control/blob/main/screenshots/pcf-hierarchy-large-structure.jpg?raw=true) |
 |:--:|
-| *Figure 4: Hierarchy control displaying a hierarchy with 150+ accounts.* |
+| *Figure 5: Hierarchy control displaying a hierarchy with 150+ accounts.* |
 
 ---
 
