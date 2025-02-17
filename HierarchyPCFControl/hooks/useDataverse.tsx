@@ -28,9 +28,9 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
             const [metadata, relationship] = await fetchEntityMetadata();
             const forms = await fetchQuickViewForms(relationship, attributes, metadata);
 
-            const activeForm = forms.find((f) => f.isActive == true);
+            const activeForm = forms.find((f) => f.label.includes("Hierarchy"));
             setForms(forms);
-            setActiveForm(activeForm);
+            setActiveForm(activeForm ?? forms[0]);
 
             if(!activeForm)
                 throw Error(context.resources.getString("error-selecting-form"));
@@ -62,8 +62,7 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
             return {
                 formId: f.formid,
                 label: f.name,
-                columns: extractColumns(f.formxml, relationship, attributes, metadata),
-                isActive: (f.name.includes("Hierarchy") || index == 0)
+                columns: extractColumns(f.formxml, relationship, attributes, metadata)
             }
         })
 
