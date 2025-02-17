@@ -10,6 +10,7 @@ import useTree from "../../hooks/useTree";
 import SidePanel from "../panel/panel";
 import NodeCard from "./node/node";
 import { ControlContext } from "../../context/control-context";
+import useWindowDimensions from "../../hooks/useDimensions";
 
 interface IProps {
     initialNodes: Node[],
@@ -18,6 +19,7 @@ interface IProps {
 
 const Flow = memo(({ initialNodes, initialEdges }: IProps) => {
     const { context } = useContext(ControlContext);
+    const { height, width } = useWindowDimensions();
     const [direction, setDirection] = useState('TB');
     const { 
         nodes, 
@@ -46,15 +48,9 @@ const Flow = memo(({ initialNodes, initialEdges }: IProps) => {
 
     const nodeList = useMemo(() => nodes.filter((node) => !node.hidden), [nodes]);
 
-    const dimensions = useMemo(() => ({ 
-        width: context.mode.allocatedWidth == -1 ? '100%': context.mode.allocatedWidth, 
-        height: context.mode.allocatedHeight  == -1 ? '95vh': context.mode.allocatedHeight
-    }), [context.mode])
-
-
     return (
         <FlowContext.Provider value={{nodes, edges, selectedPath, selectedNode, moveToNode, onExpandNode, getChildrenIds, direction, setDirection}}>
-            <div style={dimensions}>
+            <div style={{ width, height }}>
                 <ReactFlow
                     nodes={nodeList}
                     edges={edgeList}
