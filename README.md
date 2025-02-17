@@ -80,25 +80,22 @@ No, this control is completely optional. If you only need the main hierarchy con
 5. **Open Hierarchy Control from a Ribbon Button (Optional)**: Use the following JavaScript code to open the Hierarchy control from a ribbon button:
 
 ```javascript
-var paneInput = {
-    pageType: "control",
-    controlName: "nl_novalogica.HierarchyPFControl",
-    data: { etn: "account", id: "0000-000-0000000-000" }
-};
+    const paneInput = {
+        pageType: "control",
+        controlName: "nl_novalogica.HierarchyPCFControl",
+        data: { etn: entityName, id: col.rowData?.[RECID] },
+        title: `Hierarchy for ${entityName}`
+    };
 
-var navigationOptions = {
-    target: 2,
-    position: 1
-};
+    const navigationOptions = {
+        target: 2,
+        width: 500, 
+        height: 400,
+        position: 1
+    };
 
-Xrm.Navigation.navigateTo(paneInput, navigationOptions).then(
-    function success() {
-        // Run code on success
-    },
-    function error() {
-        // Handle errors
-    }
-);
+    //@ts-expect-error - Xrm is not recognized
+    Xrm.Navigation.navigateTo(paneInput, navigationOptions);
 ```
 
 ---
