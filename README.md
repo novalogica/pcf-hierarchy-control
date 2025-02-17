@@ -1,4 +1,5 @@
 <div align="center">
+    
 [![GitHub Release](https://img.shields.io/github/v/release/novalogica/pcf-hierarchy-control)](https://github.com/novalogica/pcf-hierarchy-control/releases)
 [![GitHub License](https://img.shields.io/github/license/novalogica/pcf-hierarchy-control)](https://github.com/novalogica/pcf-hierarchy-control/blob/main/LICENSE)
 
@@ -7,6 +8,7 @@
 [![React](https://img.shields.io/badge/React-%2320232a.svg?logo=react&logoColor=%2361DAFB)](#)
 [![Fluent UI](https://img.shields.io/badge/Fluent_UI-white.png?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAABUFBMVEUAAAAAAAAAAAAAAABAQEAkJCQgICAXFxcnJyckJCQiIiIgICAeHh4cHBwbGxsmJiYhISEgICAjIyMiIiIhISEgICAfHx8eHh4kJCQjIyMiIiIhISEgICAfHx8fHx8jIyMiIiIfHx8jIyMiIiIhISEiIiIhISEhISEgICAgICAfHx8hISEiIiIhISEhISEhISEgICAiIiIhISEgICAhISEhISEhISEgICAgICAiIiIiIiIhISEhISEgICAiIiIhISEiIiIhISEhISEiIiIhISEhISEhISEhISEhISEgICAiIiIhISEhISEhISEiIiIhISEhISEhISEiIiIhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISEhISH///+byjMDAAAAbnRSTlMAAQIDBAcICw0ODxAREhMUFxgdJicoKSorLC0uMDEyMzVBQkRFSk1OT1BRVVtcXV5fYmZ3enx9fn+AgYKEhoiRmJmip6ipqqusra6xs7u+wMLKzdDT19ja297f4Ovs7u/w8fLz9Pb3+Pn6+/z9/m27ZW8AAAABYktHRG9VCGGBAAABcUlEQVQoz32TV1fCQBCFJ1gQVOwde0NFxd4bCIK9NxSIYCTJ7v3/j+6CSgjBeZqTb2Z27j0TIkvUBB+eQrXkHK65B4h4XXYqqJl/BO4Mdgs8V0wodN4vujSdxm/sE5Sg7JxViAQmZVpOWCjhMcBcUmQmsSgI6cDoHw6IjTLbjb+4aScDdtxgwVcxhvSml77yRXjSb3k7gDD1xzlS67qxo4LF+sr2nhGYqC/GpW5+PmSTFShg8kQlTvjICXs3UuDgDB97tgIxvGElBVyMfOW7wyZyB63l3ckM+Km/KKwnYpsgdLP4QMkWWZDptAwHi/aWsD8hXOiw4KRQG+ku4uEzLjxstq2WFnZ0abpfqFf3myps8e1lYUpj3lc95OAa+bZU4G3La7flBxO1QXVXHtIfdiFN/2AFqgOeRG6tvpDxrAOuO2R4mZWZmXO88cFr4FJciPlZ5SeYSsI4atG1KpjcuxreWJ6qRnsYMOifmLi7LP/wDa9gaWogJU8FAAAAAElFTkSuQmCC
 )](#)
+
 </div>
 
 # Hierarchy Control
