@@ -1,3 +1,13 @@
+<div align="center">
+[![GitHub Release](https://img.shields.io/github/v/release/novalogica/pcf-hierarchy-control)](https://github.com/novalogica/pcf-hierarchy-control/releases)
+[![GitHub License](https://img.shields.io/github/license/novalogica/pcf-hierarchy-control)](https://github.com/novalogica/pcf-hierarchy-control/blob/main/LICENSE)
+ 
+[![Power Apps](https://img.shields.io/badge/Power_Apps-purple)](#)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](#)
+[![React](https://img.shields.io/badge/React-%2320232a.svg?logo=react&logoColor=%2361DAFB)](#)
+[![fluent/ui](https://img.shields.io/badge/fluent_ui-black)](#)
+</div>
+
 # Hierarchy Control
 
 | ![Hierarchy Control](https://github.com/novalogica/pcf-hierarchy-control/blob/main/screenshots/pcf-hierarchy-control.jpg?raw=true) |
