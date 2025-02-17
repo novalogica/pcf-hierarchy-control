@@ -68,7 +68,7 @@ const Flow = memo(({ initialNodes, initialEdges }: IProps) => {
                     edgesFocusable={false}
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
-                    minZoom={-0.15}
+                    minZoom={0.25}
                     fitView
                 >
                     { 
