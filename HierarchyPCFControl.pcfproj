@@ -8,7 +8,7 @@
   <Import Project="$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Pcf.props" Condition="Exists('$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Pcf.props')" />
 
   <PropertyGroup>
-    <Name>desktop</Name>
+    <Name>HierarchyPCFControl</Name>
     <ProjectGuid>52abbbdf-a15d-4278-9869-cee58fe11a1e</ProjectGuid>
     <OutputPath>$(MSBuildThisFileDirectory)out\controls</OutputPath>
     <PcfBuildMode>production</PcfBuildMode>

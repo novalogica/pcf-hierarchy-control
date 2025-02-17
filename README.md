@@ -23,7 +23,7 @@ This **PowerApps Component Framework (PCF)** control is designed to replace the 
 
 | ![Dynamic Cards](https://github.com/novalogica/pcf-hierarchy-control/blob/main/screenshots/pcf-hierarchy-card.jpg?raw=true) |
 |:--:|
-| *Figure 2: Cards can display multiple columns, providing a comprehensive overview of each node* |
+| *Figure 1: Cards can display multiple columns, providing a comprehensive overview of each node* |
 
 
 ### **Side Panel with Tree View**
@@ -50,7 +50,7 @@ This **PowerApps Component Framework (PCF)** control is designed to replace the 
 
 | ![Hierarchy Indicator](https://github.com/novalogica/pcf-hierarchy-control/blob/main/screenshots/pa-hierarchy-grid-control.png?raw=true) |
 |:--:|
-| *Figure 3: Hierarchy Indicator control displaying hierarchy indicator for all account records.* |
+| *Figure 2: Hierarchy Indicator control displaying hierarchy indicator for all account records.* |
 
 If you want to maintain the legacy feature of checking if a record has a hierarchy and opening it within the view, providing a seamless transition for users, you can add this bundled control to the entity views.
 
@@ -64,7 +64,7 @@ If you want to maintain the legacy feature of checking if a record has a hierarc
 
 | ![Hierarchy Indicator](https://github.com/novalogica/pcf-hierarchy-control/blob/main/screenshots/pcf-hierarchy-grid-configuration.png?raw=true) |
 |:--:|
-| *Figure 4: Hierarchy indicator control configuration* |
+| *Figure 3: Hierarchy indicator control configuration* |
 
 ### Is the Hierarchy Indicator Control mandatory?
 No, this control is completely optional. If you only need the main hierarchy control, you can open it directly using a **pageType=Control** URL, similar to how the deprecated Microsoft control functioned.
