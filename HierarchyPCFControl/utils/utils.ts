@@ -31,6 +31,6 @@ export const getWindowDimensions = () => {
 
     return {
         width: width ?? '100%',
-        height: height ?? '95vh'
+        height: height && height > 0 ? height - 48 : '95vh'
     };
 }
