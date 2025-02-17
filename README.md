@@ -47,7 +47,7 @@ This **PowerApps Component Framework (PCF)** control is designed to replace the 
 
 ---
 
-## [Hierarchy Indicator Control (Optional)](https://github.com/novalogica/pcf-hierarchy-grid-control)
+## Hierarchy Indicator Control (Optional)
 
 | ![Hierarchy Indicator](https://github.com/novalogica/pcf-hierarchy-control/blob/main/screenshots/pa-hierarchy-grid-control.png?raw=true) |
 |:--:|
