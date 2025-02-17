@@ -7,7 +7,7 @@
 [![Power Apps Component](https://img.shields.io/badge/Power_Apps-purple)](#)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](#)
 [![React](https://img.shields.io/badge/React-%2320232a.svg?logo=react&logoColor=%2361DAFB)](#)
-[![FluentUI](https://img.shields.io/badge/fluent_ui-black)](#)
+[![Fluent UI](https://img.shields.io/badge/fluent_ui-black)](#)
  
 </div>
 
