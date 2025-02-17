@@ -59,10 +59,8 @@ export const createAttributeList = (entity: any, columns: any[], referencedAttri
           name: entity[`${c.logicalName}@OData.Community.Display.V1.FormattedValue`] ?? "",
           entityType: entity[`${c.logicalName}@Microsoft.Dynamics.CRM.lookuplogicalname`] ?? ""
         } as ComponentFramework.LookupValue;
-      } else if (c.attributeType === "Picklist" || c.attributeType === "Money" ) {
-        value = entity[`${c.logicalName}@OData.Community.Display.V1.FormattedValue`] ?? ""
       } else {
-        value = entity[c.logicalName] ?? "-";
+        value = entity[`${c.logicalName}@OData.Community.Display.V1.FormattedValue`] ?? entity[`${c.logicalName}`] ?? "-"
       }
 
       acc[c.logicalName] = {
