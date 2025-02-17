@@ -91,7 +91,6 @@ No, this control is completely optional. If you only need the main hierarchy con
         position: 1
     };
 
-    //@ts-expect-error - Xrm is not recognized
     Xrm.Navigation.navigateTo(paneInput, navigationOptions);
 ```
 
