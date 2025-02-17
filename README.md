@@ -2,7 +2,6 @@
 
 | ![Hierarchy Control](https://github.com/novalogica/pcf-hierarchy-control/blob/main/screenshots/pcf-hierarchy-control.jpg?raw=true) |
 |:--:|
-| *Figure 1: Hierarchy Control displaying a sample hierarchy.* |
 
 This **PowerApps Component Framework (PCF)** control is designed to replace the deprecated hierarchy control in Dynamics 365. It offers enhanced functionality and flexibility, allowing users to visualize and interact with hierarchical data in a more dynamic and user-friendly way. 
 
