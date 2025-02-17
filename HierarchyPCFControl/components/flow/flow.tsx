@@ -1,5 +1,5 @@
 import * as React from "react";
-import { memo, useContext, useMemo, useState } from "react";
+import { memo, useContext, useEffect, useMemo, useState } from "react";
 import { ReactFlow, MiniMap, Controls, Background, ConnectionLineType, Panel } from "@xyflow/react";
 import { Node, Edge } from "@xyflow/react/dist/esm/types";
 
@@ -18,7 +18,7 @@ interface IProps {
 }
 
 const Flow = memo(({ initialNodes, initialEdges }: IProps) => {
-    const { context } = useContext(ControlContext);
+    const { context, entityName, entityId } = useContext(ControlContext);
     const { height, width } = useWindowDimensions();
     const [direction, setDirection] = useState('TB');
     const { 
@@ -32,6 +32,13 @@ const Flow = memo(({ initialNodes, initialEdges }: IProps) => {
         onNodesChange, 
         onEdgesChange 
     } = useTree(initialNodes, initialEdges, direction);
+
+    useEffect(() => {
+        const node = nodes.find(n => n.id === entityId);
+
+        if(node)
+            document.title = `Hierarchy for ${entityName}: ${node.data.label}`;
+    }, [nodes, entityId])
 
     const edgeList = useMemo(() => {
         return edges.map((edge) => {

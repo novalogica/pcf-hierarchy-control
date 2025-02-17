@@ -83,14 +83,11 @@ No, this control is completely optional. If you only need the main hierarchy con
     const paneInput = {
         pageType: "control",
         controlName: "nl_novalogica.HierarchyPCFControl",
-        data: { etn: entityName, id: col.rowData?.[RECID] },
-        title: `Hierarchy for ${entityName}`
+        data: { etn: entityName, id: entityId }
     };
 
     const navigationOptions = {
         target: 2,
-        width: 500, 
-        height: 400,
         position: 1
     };
 

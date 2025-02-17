@@ -27,10 +27,10 @@ export const getColorFromInitials = (initials: string, colorPalette: PersonaInit
 }
 
 export const getWindowDimensions = () => {
-    const { innerWidth: width, innerHeight: height } = window;
+    const { innerHeight: height } = window;
 
     return {
-        width: width ?? '100%',
+        width: '100%',
         height: height && height > 0 ? height - 48 : '95vh'
     };
 }

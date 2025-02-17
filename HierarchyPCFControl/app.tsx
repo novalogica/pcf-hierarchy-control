@@ -6,7 +6,7 @@ import { ReactFlowProvider } from "@xyflow/react";
 import { ControlContext } from "./context/control-context";
 import { useDataverse } from "./hooks/useDataverse";
 import Flow from "./components/flow/flow";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 
 interface IProps {
     context: ComponentFramework.Context<IInputs>,
