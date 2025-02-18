@@ -60,7 +60,11 @@ const NodeCard = memo((props: NodeProps<NodeRecord>) => {
             }
           </Text>
         </div>
-    ))
+    )).sort((a,b) => {
+      const aIndex = activeForm?.columns.findIndex(c => c.logicalName === a.key);
+      const bIndex = activeForm?.columns.findIndex(c => c.logicalName === b.key);
+      return (aIndex ?? 0) - (bIndex ?? 0);
+    })
   }, [activeForm, data.attributes])  
 
   const owner = useMemo(() => data.attributes!["_ownerid_value"].value as ComponentFramework.LookupValue, [data.attributes])
