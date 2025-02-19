@@ -50,7 +50,7 @@ const NodeCard = memo((props: NodeProps<NodeRecord>) => {
     return filteredAttributes.map((key) => (
         <div key={key} style={styles.info}>
           <Text style={styles.infoLabel} nowrap block>
-            {data.attributes![key].displayName}
+            {activeForm?.columns.find(c => c.logicalName === key)?.displayName ?? data.attributes![key].displayName}
           </Text>
           <Text style={styles.infoValue} nowrap block>
             {
