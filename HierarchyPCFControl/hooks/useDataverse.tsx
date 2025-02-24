@@ -28,11 +28,11 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
             const [metadata, relationship] = await fetchEntityMetadata();
             const forms = await fetchQuickViewForms(relationship, attributes, metadata);
 
-            const activeForm = forms.find((f) => f.label.includes("Hierarchy"));
+            const activeForm = forms.find((f) => f.label.includes("Hierarchy")) ?? (forms && forms[0]);
             setForms(forms);
-            setActiveForm(activeForm ?? forms[0]);
+            setActiveForm(activeForm);
 
-            if(!activeForm)
+            if(!forms || forms.length < 0)
                 throw Error(context.resources.getString("error-selecting-form"));
 
             const columns = generateColumns(forms);
