@@ -67,7 +67,13 @@ const NodeCard = memo((props: NodeProps<NodeRecord>) => {
     })
   }, [activeForm, data.attributes])  
 
-  const owner = useMemo(() => data.attributes!["_ownerid_value"].value as ComponentFramework.LookupValue, [data.attributes])
+  const owner = useMemo(() => {
+    if(data.attributes && Object.keys(data.attributes).includes("_ownerid_value")) {
+      return data.attributes!["_ownerid_value"].value as ComponentFramework.LookupValue 
+    }
+    
+    return undefined;
+  }, [data.attributes])
 
   const state = useMemo(() => data.attributes!["statecode"] as Attribute, [data.attributes])
 
@@ -91,8 +97,10 @@ const NodeCard = memo((props: NodeProps<NodeRecord>) => {
       <div ref={detailRef} style={styles.detailsContainer}>
         {attributes}
       </div>
-      <div style={styles.footerContainer}>
-        <Badge name={owner.name} etn={owner.entityType} id={owner.id} size={PersonaSize.size32} nameStyle={styles.ownerText} isClickable/>
+      <div style={{...styles.footerContainer, justifyContent: owner ? 'space-between': 'flex-end'}}>
+        {
+          owner && <Badge name={owner.name} etn={owner.entityType} id={owner.id} size={PersonaSize.size32} nameStyle={styles.ownerText} isClickable/>
+        }
         <IconButton iconProps={{ iconName: 'OpenInNewWindow' }} onClick={handleOpenRecord}/>
       </div>
       {hasChildrens && <NodeExpandButton {...props} />}      

@@ -107,6 +107,6 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
         edges,
         forms,
         activeForm,
-        setActiveForm
+        setActiveForm,
     }
 }

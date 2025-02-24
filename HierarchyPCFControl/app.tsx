@@ -38,7 +38,7 @@ const App = memo(({ context, entityName, entityId }: IProps) => {
     }
 
     return (
-        <ControlContext.Provider value={{context, entityName, entityId, forms, activeForm, setActiveForm}}>
+        <ControlContext.Provider value={{context, entityName, entityId, forms, activeForm, setActiveForm }}>
             <ReactFlowProvider>
                 <Flow initialNodes={nodes} initialEdges={edges}/>
             </ReactFlowProvider>

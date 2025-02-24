@@ -1,5 +1,6 @@
 import { PersonaInitialsColor } from "@fluentui/react/lib/Persona";
 import { Column } from "../interfaces/entity";
+import { OwnershipType } from "../interfaces/entity/metadata";
 
 const nodeWidth = 550;
 const nodeHeight = 450;
@@ -36,18 +37,25 @@ const badgeColors = [
   PersonaInitialsColor.cyan,
 ]
 
-const defaultColumns: Column[] = [
-  {
-    logicalName: '_ownerid_value',
-    displayName: 'Owner',
-    attributeType: 'Owner'
-  },
-  {
+const defaultColumns = (type: OwnershipType): Column[] => {
+  const columns = [{
     logicalName: 'statecode',
     displayName: 'State',
     attributeType: 'Picklist'
+  }];
+
+  switch(type){
+    case OwnershipType.UserOwned: {
+      return [...columns, {
+        logicalName: '_ownerid_value',
+        displayName: 'Owner',
+        attributeType: 'Owner'
+      }]
+    }
+    default: 
+      return columns;
   }
-]
+}
 
 export {
   nodeWidth,
