@@ -46,7 +46,7 @@ const NodeTree = memo(({ isCollapsed }: IProps) => {
     if ((ev?.target as HTMLElement).closest('.ms-Nav-chevron')) {
       onExpandNode(item?.key as string);
     }
-  }, [])
+  }, [nodes, isCollapsed])
 
   return <Nav 
     groups={navLinkGroups} 
