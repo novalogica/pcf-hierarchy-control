@@ -75,7 +75,13 @@ const NodeCard = memo((props: NodeProps<NodeRecord>) => {
     return undefined;
   }, [data.attributes])
 
-  const state = useMemo(() => data.attributes!["statecode"] as Attribute, [data.attributes])
+  const state = useMemo(() => {
+    if(data.attributes && Object.keys(data.attributes).includes("statecode")) {
+      return data.attributes!["statecode"] as Attribute
+    }
+
+    return undefined;
+  }, [data.attributes])
 
   const handles: { type: HandleType, position: Position}[] = useMemo(() => ([
       {
@@ -92,7 +98,7 @@ const NodeCard = memo((props: NodeProps<NodeRecord>) => {
     <div style={cardStyle} onClick={handleCardClick}>
       <div style={styles.header}>
         <Badge name={data.label} etn={entityName} id={entityId} size={PersonaSize.size48} nameStyle={styles.cardBadgeName} />
-        <span style={styles.statusBadge}>{state.value}</span>
+        { state && <span style={styles.statusBadge}>{state.value}</span> }
       </div>
       <div ref={detailRef} style={styles.detailsContainer}>
         {attributes}

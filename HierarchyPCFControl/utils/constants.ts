@@ -53,7 +53,7 @@ const defaultColumns = (type: OwnershipType): Column[] => {
       }]
     }
     default: 
-      return columns;
+      return [];
   }
 }
 

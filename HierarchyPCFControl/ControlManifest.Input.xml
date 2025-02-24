@@ -3,7 +3,7 @@
   <control 
     namespace="novalogica" 
     constructor="HierarchyPCFControl" 
-    version="1.0.1" 
+    version="1.0.3" 
     display-name-key="Hierarchy Control" 
     description-key="HierarchyPCFControl description" 
     control-type="standard" 
