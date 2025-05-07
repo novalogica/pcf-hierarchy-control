@@ -16,32 +16,6 @@
       usage="bound" 
       required="true"
     />
-
-    <property 
-      name="defaultForm" 
-      display-name-key="Default Form" 
-      description-key="Add the name of the specific form you want to display by default" 
-      of-type="SingleLine.TextArea" 
-      usage="input" 
-      required="false"
-    />
-
-    <property 
-      name="excludedForms" 
-      display-name-key="Excluded Forms" 
-      description-key="Add the names you want to exclude separated by commas (Example: Account Card,Social Profiles)" 
-      of-type="TwoOptions" 
-      usage="input" 
-      required="false"
-    />
-
-    <property 
-      name="allowFormChange" 
-      display-name-key="Allow users to change form?" 
-      of-type="TwoOptions" 
-      usage="input" 
-      required="true"
-    />
     
     <resources>
       <code path="index.ts" order="1"/>
