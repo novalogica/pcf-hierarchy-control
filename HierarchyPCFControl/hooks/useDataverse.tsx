@@ -53,20 +53,40 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
 }
 
     const fetchQuickViewForms = async (relationship: RelationshipInfo, attributes: EntityDefinition[], metadata: EntityMetadata): Promise<Form[]> => {
-        const result = (await context.webAPI.retrieveMultipleRecords("systemform", `?$filter=objecttypecode eq '${entityName}' and type eq 6`));
-
+        const result = await context.webAPI.retrieveMultipleRecords("systemform", `?$filter=objecttypecode eq '${entityName}' and type eq 6`);
+        
         if (!result.entities || result.entities.length <= 0) 
             throw new Error("No card form found for this entity.");
+        
+        let forms = result.entities;
+        const appId = ((context as any).page?.appId as string) ?? undefined;
 
-        const forms: Form[] = result.entities.map((f, index) => {
-            return {
-                formId: f.formid,
-                label: f.name,
-                columns: extractColumns(f.formxml, relationship, attributes, metadata)
-            }
-        })
+        if (appId) {
+            const response = await xrmService.execute({
+                AppModuleId: { guid: appId }, 
+                getMetadata: function () {
+                    return {
+                        boundParameter: null,
+                        parameterTypes: {
+                            AppModuleId: { typeName: "Edm.Guid", structuralProperty: 1 }
+                        },
+                        operationType: 1, operationName: "RetrieveAppComponents"
+                    };
+                }
+            });
 
-        return forms;
+            const appFormIds = (response as any).value
+                .filter((c: any) => c.componenttype === 60)
+                .map((c: any) => c.objectid.toLowerCase());
+
+            forms = forms.filter(f => appFormIds.some((i: string) => i == f.formid.toLowerCase()));
+        }
+
+        return forms.map(f => ({
+            formId: f.formid,
+            label: f.name,
+            columns: extractColumns(f.formxml, relationship, attributes, metadata)
+        }));
     }
 
     const fetchEntityMetadata = async (): Promise<[EntityMetadata, RelationshipInfo]> => {
