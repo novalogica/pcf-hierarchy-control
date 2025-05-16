@@ -13,9 +13,9 @@ export class XrmService {
         return XrmService.instance;
     }
 
-    async fetch(endpoint: string): Promise<object[]> {
+    async fetch(endpoint: string, headers?: any): Promise<object[]> {
         return new Promise((resolve, reject) => {
-            fetch(endpoint)
+            fetch(endpoint, headers)
                 .then((response) => {
                     return response?.ok ? response.json(): reject(response.statusText);
                 })
