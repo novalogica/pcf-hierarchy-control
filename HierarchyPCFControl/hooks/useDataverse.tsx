@@ -68,7 +68,9 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
             formId: f.formid,
             label: f.name,
             columns: extractColumns(f.formxml, relationship, attributes, metadata)
-        }));
+        })).sort((a: any, b: any) => {
+            return a.label.localeCompare(b.label);
+        });
     }
 
     const fetchEntityMetadata = async (): Promise<[EntityMetadata, RelationshipInfo]> => {
