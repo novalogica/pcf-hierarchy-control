@@ -7,13 +7,15 @@ import NodeTree from "./tree";
 import { colors } from "../../utils/constants";
 import { ControlContext } from "../../context/control-context";
 import { FlowContext } from "../../context/flow-context";
+import { useStorage } from "../../hooks/useStorage";
 
 const SidePanel = memo(() => {
-  const { context, forms, activeForm, setActiveForm } = useContext(ControlContext);
+  const { context, forms, activeForm, setActiveForm, entityName } = useContext(ControlContext);
   const { direction, setDirection } = useContext(FlowContext);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const panelWidth = useMemo(() => isCollapsed ? 90 : 275, [isCollapsed])
   const menuIcon = useMemo(() => isCollapsed ? "OpenPaneMirrored": "OpenPane", [isCollapsed])
+  const { setLastUsedView } = useStorage();
   
   const onFormChanged = useCallback((_: React.FormEvent<HTMLDivElement>, item?: IDropdownOption): void => {
     if(!item)
@@ -21,6 +23,10 @@ const SidePanel = memo(() => {
 
     const form = forms.find((f) => f.formId == item.key);
     form && setActiveForm(form);
+
+    if(form && form.formId) {
+      setLastUsedView(entityName!, form.formId);
+    }
   }, [forms, activeForm]);
 
   const formOptions = useMemo(() => forms.map((f) => ({ key: f.formId, text: f.label } as IDropdownOption)), [forms])

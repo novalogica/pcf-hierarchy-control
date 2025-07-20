@@ -6,6 +6,7 @@ import { Column, EntityMetadata, Form, RelationshipInfo, EntityDefinition } from
 import { extractColumns, generateColumns } from "../utils/form";
 import { transformEntityToNodes } from "../utils/transform";
 import { XrmService } from "./service";
+import { useStorage } from "./useStorage";
 
 export const useDataverse = (context: ComponentFramework.Context<IInputs>, entityName?: string, id?: string) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -14,6 +15,7 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
     const [edges, setEdges] = useState<Edge[]>([]);
     const [forms, setForms] = useState<Form[]>([]);
     const [activeForm, setActiveForm] = useState<Form | undefined>(undefined);
+    const { getLastUsedView } = useStorage();
 
     const xrmService = useMemo(() => XrmService.getInstance(), [context]);
 
@@ -28,9 +30,18 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
             const [metadata, relationship] = await fetchEntityMetadata();
             const forms = await fetchQuickViewForms(relationship, attributes, metadata);
 
-            const activeForm = forms.find((f) => f.label.includes("Hierarchy")) ?? (forms && forms[0]);
+            const activeForm = forms.find((f) => {
+                const lastUsedView = getLastUsedView(entityName!);
+
+                if(lastUsedView) {
+                    return f.formId === lastUsedView;
+                } 
+
+                return f.label.includes("Hierarchy");
+            });
+
             setForms(forms);
-            setActiveForm(activeForm);
+            setActiveForm(activeForm ?? (forms && forms[0]));
 
             if(!forms || forms.length < 0)
                 throw Error(context.resources.getString("error-selecting-form"));
