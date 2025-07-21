@@ -12,7 +12,7 @@ import useWindowDimensions from "../../hooks/useDimensions";
 
 const SidePanel = memo(({ isCollapsed, setIsCollapsed, panelWidth }: { isCollapsed: boolean, setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>, panelWidth: number }) => {
   const { context, forms, activeForm, setActiveForm, entityName } = useContext(ControlContext);
-  const { direction, setDirection } = useContext(FlowSelectionContext);
+  const { direction, setDirection, fitView } = useContext(FlowSelectionContext);
   const menuIcon = useMemo(() => isCollapsed ? "OpenPaneMirrored": "OpenPane", [isCollapsed])
   const { setLastUsedView } = useStorage();
   const { height } = useWindowDimensions();
@@ -56,7 +56,10 @@ const SidePanel = memo(({ isCollapsed, setIsCollapsed, panelWidth }: { isCollaps
       <div style={styles.toolbarFooter}>
         <ActionButton 
           style={{...styles.toolbarItem, width: 'auto'}} 
-          onClick={() => setDirection((prev: string) => prev == "TB" ? "LR" : "TB")}
+          onClick={() => {
+            setDirection((prev: string) => prev == "TB" ? "LR" : "TB")
+            setTimeout(() => fitView(), 500);
+          }}
           iconProps={{ iconName: direction == "TB" ? "HorizontalTabKey": "DistributeDown" }}
           >
           {isCollapsed ? "" : context.resources.getString(direction == "TB" ? "Horizontal" : "Vertical")}

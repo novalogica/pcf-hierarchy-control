@@ -11,7 +11,7 @@ const dagreGraph = new graphlib.Graph().setDefaultEdgeLabel(() => ({}));
 
 export default function useTree(initialNodes: Node[], initialEdges: Edge[], direction: string) {
     const { entityId } = useContext(ControlContext);
-    const { getZoom, setCenter } = useReactFlow();
+    const { getZoom, setCenter, fitView } = useReactFlow();
     const [nodes, setNodes, onNodesChange] = useNodesState<any>(initialNodes);
     const [edges] = useEdgesState(initialEdges);
     const [selectedPath, setSelectedPath] = useState<string[]>([]);
@@ -48,11 +48,11 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
 
     const selectedNode = useMemo(() => {
         return layoutedNodes?.find(n => n.id == selectedPath[selectedPath.length - 1]);
-    }, [selectedPath, layoutedNodes, direction]);
+    }, [selectedPath, layoutedNodes]);
 
     useEffect(() => {
-        setTimeout(() => moveToNode(selectedNode ?? entityId, 0.5), 500)
-    }, [entityId, direction]);
+        setTimeout(() => moveToNode(entityId, 0.5), 500)
+    }, [entityId]);
 
     const moveToNode = useCallback((id: string, zoom?: number) => {
         const node = layoutedNodes.find((n) => n.id === id);
@@ -61,7 +61,7 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
         const path = findPath(id, layoutedEdges);
         setSelectedPath(path);
         setCenter(node.position.x + (nodeWidth / 2), node.position.y + (nodeHeight / 2), { zoom: zoom ?? getZoom(), duration: 350 });
-    }, [getZoom, setCenter, layoutedNodes, layoutedEdges, direction]);
+    }, [getZoom, setCenter, layoutedNodes, layoutedEdges]);
 
     const getChildrenIds = useCallback((nodeId: string) => {
         return layoutedEdges
@@ -130,6 +130,7 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
         moveToNode,
         onExpandNode,
         getChildrenIds,
-        onNodesChange
+        onNodesChange,
+        fitView
     };
 }
