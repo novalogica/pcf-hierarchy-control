@@ -130,6 +130,7 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
         moveToNode,
         onExpandNode,
         getChildrenIds,
-        onNodesChange
+        onNodesChange,
+        fitView
     };
 }
