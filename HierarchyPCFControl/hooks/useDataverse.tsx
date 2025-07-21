@@ -26,8 +26,7 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
 
     const fetchData = async () => {
         try {
-            const attributes = await fetchAttributes();
-            const [metadata, relationship] = await fetchEntityMetadata();
+            const [attributes, [metadata, relationship]] = await Promise.all([fetchAttributes(), fetchEntityMetadata()]);
             const forms = await fetchQuickViewForms(relationship, attributes, metadata);
 
             const activeForm = forms.find((f) => {
@@ -43,7 +42,7 @@ export const useDataverse = (context: ComponentFramework.Context<IInputs>, entit
             setForms(forms);
             setActiveForm(activeForm ?? (forms && forms[0]));
 
-            if(!forms || forms.length < 0)
+            if(!forms || forms.length === 0)
                 throw Error(context.resources.getString("error-selecting-form"));
 
             const columns = generateColumns(forms);

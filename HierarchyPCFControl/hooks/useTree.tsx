@@ -11,101 +11,78 @@ const dagreGraph = new graphlib.Graph().setDefaultEdgeLabel(() => ({}));
 
 export default function useTree(initialNodes: Node[], initialEdges: Edge[], direction: string) {
     const { entityId } = useContext(ControlContext);
-    const { getZoom, setCenter } = useReactFlow();
+    const { getZoom, setCenter, fitView } = useReactFlow();
     const [nodes, setNodes, onNodesChange] = useNodesState<any>(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+    const [edges] = useEdgesState(initialEdges);
     const [selectedPath, setSelectedPath] = useState<string[]>([]);
 
-    const selectedNode = useMemo(() => {
-        return nodes?.find(n => n.id == selectedPath[selectedPath.length - 1]);
-    }, [selectedPath])
-
-    useEffect(() => onLayout(), [initialNodes, initialEdges, direction]);
-
-    const onLayout = useCallback(() => {
-        const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements();
-        setNodes([...layoutedNodes]);
-        setEdges([...layoutedEdges]);
-
-        const node = layoutedNodes.find((n) => n.id === (selectedNode?.id ?? entityId));
-        
-        if(node) {
-            const path = findPath(node.id, edges);
-            setSelectedPath(path);
-            setTimeout(() => setCenter(node.position.x, node.position.y, { zoom: 0.5, duration: 500 }), 500);
-        }
-    }, [entityId, nodes, edges, direction]);
-
-    const moveToNode = useCallback((id: string) => {
-        const node = nodes.find((n) => n.id === id);
-
-        if(!node)
-            return;
-
-        const path = findPath(id, edges);
-        setSelectedPath(path);
-
-        const currentZoom = getZoom();
-        const nodeCenterX = node.position.x;
-        const nodeCenterY = node.position.y;
-
-        setCenter(nodeCenterX, nodeCenterY, { zoom: currentZoom, duration: 500 });
-    }, [getZoom, setCenter, nodes]);
-
-    const getLayoutedElements = useCallback(() => {
+    const { layoutedNodes, layoutedEdges } = useMemo(() => {
         const isHorizontal = direction === 'LR';
         dagreGraph.setGraph({ rankdir: direction });
-    
+
         nodes.forEach((node) => {
             dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
         });
-    
+
         edges.forEach((edge) => {
             dagreGraph.setEdge(edge.source, edge.target);
         });
-    
+
         layout(dagreGraph);
-    
+
         const newNodes = nodes.map((node) => {
             const nodeWithPosition = dagreGraph.node(node.id);
             const newNode = {
-            ...node,
-            targetPosition: isHorizontal ? 'left' : 'top',
-            sourcePosition: isHorizontal ? 'right' : 'bottom',
-            position: {
-                x: nodeWithPosition.x - nodeWidth / 2,
-                y: nodeWithPosition.y - nodeHeight / 2,
-            },
+                ...node,
+                targetPosition: isHorizontal ? 'left' : 'top',
+                sourcePosition: isHorizontal ? 'right' : 'bottom',
+                position: {
+                    x: nodeWithPosition.x - nodeWidth / 2,
+                    y: nodeWithPosition.y - nodeHeight / 2,
+                },
             };
-        
             return newNode;
         });
-    
-        return { nodes: newNodes, edges };
+        return { layoutedNodes: newNodes, layoutedEdges: edges };
     }, [nodes, edges, direction]);
 
+    const selectedNode = useMemo(() => {
+        return layoutedNodes?.find(n => n.id == selectedPath[selectedPath.length - 1]);
+    }, [selectedPath, layoutedNodes, direction]);
+
+    useEffect(() => {
+        setTimeout(() => moveToNode(entityId, 0.5), 500)
+    }, [entityId]);
+
+    const moveToNode = useCallback((id: string, zoom?: number) => {
+        const node = layoutedNodes.find((n) => n.id === id);
+        if(!node)
+            return;
+        const path = findPath(id, layoutedEdges);
+        setSelectedPath(path);
+        setCenter(node.position.x + (nodeWidth / 2), node.position.y + (nodeHeight / 2), { zoom: zoom ?? getZoom(), duration: 350 });
+    }, [getZoom, setCenter, layoutedNodes, layoutedEdges, direction]);
+
     const getChildrenIds = useCallback((nodeId: string) => {
-        return edges
+        return layoutedEdges
             .filter((edge) => edge.source === nodeId)
             .map((edge) => edge.target);
-    }, [edges]);
+    }, [layoutedEdges]);
 
     const getAllDescendantIds = useCallback((nodeId: string) => {
         const descendants: string[] = [];
         const stack: string[] = [nodeId];
-
         while (stack.length > 0) {
             const currentId = stack.pop()!;
             const childrenIds = getChildrenIds(currentId);
             descendants.push(...childrenIds);
             stack.push(...childrenIds);
         }
-
         return descendants;
     }, [getChildrenIds]);
 
     const onExpandNode = useCallback((nodeId: string) => {
-        const path = findPath(nodeId, edges);
+        const path = findPath(nodeId, layoutedEdges);
         setSelectedPath(path);
 
         setNodes((prevNodes) => {
@@ -143,17 +120,17 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
 
             return updatedNodes;
         });
-    }, [nodes, edges, getChildrenIds, moveToNode]);
+    }, [layoutedEdges, getAllDescendantIds, setNodes]);
     
     return {
-        nodes,
-        edges,
+        nodes: layoutedNodes,
+        edges: layoutedEdges,
         selectedPath,
         selectedNode,
         moveToNode,
         onExpandNode,
         getChildrenIds,
         onNodesChange,
-        onEdgesChange
+        fitView
     };
 }

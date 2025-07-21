@@ -3,7 +3,7 @@ import { memo, useCallback, useContext, useMemo } from 'react';
 import { Nav, INavLinkGroup, INavLink, INavStyles } from '@fluentui/react/lib/Nav';
 import { PersonaSize } from "@fluentui/react/lib/Persona";
 
-import { FlowContext } from '../../context/flow-context';
+import { FlowDataContext, FlowSelectionContext } from "../../context/flow-context";
 import { Badge } from '../badge/badge';
 
 interface IProps {
@@ -11,15 +11,16 @@ interface IProps {
 }
 
 const NodeTree = memo(({ isCollapsed }: IProps) => {
-  const { nodes, selectedPath, moveToNode, onExpandNode } = useContext(FlowContext);
+  const { nodes, moveToNode, onExpandNode } = useContext(FlowDataContext);
+  const { selectedPath } = useContext(FlowSelectionContext);
 
   const mapNodesToNavLinks = useCallback((parentId: string | null = null, includeCollapsed: boolean = false): INavLink[] => {
-    let filteredNodes = nodes.filter((node) => includeCollapsed || (parentId ? node.data.parentId === parentId : !node.data.parentId));
+    let filteredNodes = nodes.filter((node: any) => includeCollapsed || (parentId ? node.data.parentId === parentId : !node.data.parentId));
 
     if(isCollapsed)
-      filteredNodes = filteredNodes.filter((node) => !node.hidden)
+      filteredNodes = filteredNodes.filter((node: any) => !node.hidden)
     
-    return filteredNodes.map((node) => {
+    return filteredNodes.map((node: any) => {
         const label = node.data.label && typeof node.data.label === 'string' ? node.data.label : '-';
         const isSelected = selectedPath?.includes(node.id);
         const childrenLinks = includeCollapsed ? undefined : mapNodesToNavLinks(node.id);

@@ -1,21 +1,21 @@
 import * as React from "react";
-import { memo, useCallback, useContext, useMemo, useState } from "react";
+import { memo, useCallback, useContext, useMemo } from "react";
 import { ActionButton } from "@fluentui/react/lib/Button";
 import { Dropdown, IDropdownOption } from "@fluentui/react/lib/Dropdown";
 
 import NodeTree from "./tree";
 import { colors } from "../../utils/constants";
 import { ControlContext } from "../../context/control-context";
-import { FlowContext } from "../../context/flow-context";
+import { FlowSelectionContext } from "../../context/flow-context";
 import { useStorage } from "../../hooks/useStorage";
+import useWindowDimensions from "../../hooks/useDimensions";
 
-const SidePanel = memo(() => {
+const SidePanel = memo(({ isCollapsed, setIsCollapsed, panelWidth }: { isCollapsed: boolean, setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>, panelWidth: number }) => {
   const { context, forms, activeForm, setActiveForm, entityName } = useContext(ControlContext);
-  const { direction, setDirection } = useContext(FlowContext);
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const panelWidth = useMemo(() => isCollapsed ? 90 : 275, [isCollapsed])
+  const { direction, setDirection, fitView } = useContext(FlowSelectionContext);
   const menuIcon = useMemo(() => isCollapsed ? "OpenPaneMirrored": "OpenPane", [isCollapsed])
   const { setLastUsedView } = useStorage();
+  const { height } = useWindowDimensions();
   
   const onFormChanged = useCallback((_: React.FormEvent<HTMLDivElement>, item?: IDropdownOption): void => {
     if(!item)
@@ -32,14 +32,12 @@ const SidePanel = memo(() => {
   const formOptions = useMemo(() => forms.map((f) => ({ key: f.formId, text: f.label } as IDropdownOption)), [forms])
 
   return (
-    <div style={{...styles.toolbar, width: panelWidth, alignItems: isCollapsed ? 'center': 'start'}}>
+    <div style={{...styles.toolbar, width: panelWidth, height: `calc(${height} - 32px)`, alignItems: isCollapsed ? 'center': 'start'}}>
       <ActionButton 
         style={{...styles.toolbarItem, width: 'auto'}} 
-        onClick={() => setIsCollapsed(prev => !prev)}
-        iconProps={{ iconName: menuIcon }}
-      >
-        {!isCollapsed && context.resources.getString("collapse")}
-      </ActionButton>
+        onClick={() => window.history.back()}
+        iconProps={{ iconName: "Back" }}
+      />
       <Dropdown
         label={isCollapsed ? "" : context.resources.getString("form")}
         selectedKey={activeForm ? activeForm.formId : undefined}
@@ -55,13 +53,25 @@ const SidePanel = memo(() => {
       <div style={{...styles.treeContainer, overflowY: 'auto', overflowX: isCollapsed ? 'hidden': 'auto'}}>
         <NodeTree isCollapsed={isCollapsed}/>
       </div>
-      <ActionButton 
-        style={{...styles.toolbarItem, width: 'auto'}} 
-        onClick={() => setDirection(prev => prev == "TB" ? "LR" : "TB")}
-        iconProps={{ iconName: direction == "TB" ? "HorizontalTabKey": "DistributeDown" }}
-      >
-        {isCollapsed ? "" : context.resources.getString(direction == "TB" ? "Horizontal" : "Vertical")}
-      </ActionButton>
+      <div style={styles.toolbarFooter}>
+        <ActionButton 
+          style={{...styles.toolbarItem, width: 'auto'}} 
+          onClick={() => {
+            setDirection((prev: string) => prev == "TB" ? "LR" : "TB")
+            fitView({ duration: 350, interpolate: 'smooth'});
+          }}
+          iconProps={{ iconName: direction == "TB" ? "HorizontalTabKey": "DistributeDown" }}
+          >
+          {isCollapsed ? "" : context.resources.getString(direction == "TB" ? "Horizontal" : "Vertical")}
+        </ActionButton>
+        <ActionButton 
+          style={{...styles.toolbarItem, width: 'auto'}} 
+          onClick={() => setIsCollapsed((prev: boolean) => !prev)}
+          iconProps={{ iconName: menuIcon }}
+          >
+          {!isCollapsed && context.resources.getString("collapse")}
+        </ActionButton>
+      </div>
     </div>
   );
 })
@@ -76,10 +86,16 @@ const styles: Record<string, React.CSSProperties> = {
     gap: 24,
     padding: 16,
     backgroundColor: 'white',
-    borderRadius: 8,
-    boxShadow: '0px 10px 15px -3px rgba(0,0,0,0.1)',
+    borderBottomRightRadius: 8,
+    borderTopRightRadius: 8,
+    boxShadow: '0px 10px 15px -3px rgba(0, 0, 0, 0.15)'
+  },
+  toolbarFooter: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    height: '100%'
+    width: '100%',
   },
   toolbarItem: {
     width: '100%',

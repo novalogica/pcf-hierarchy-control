@@ -7,7 +7,7 @@ import { PersonaSize } from "@fluentui/react/lib/Persona";
 import { Handle, HandleType, Position } from '@xyflow/react';
 import { NodeProps } from "@xyflow/react/dist/esm/types";
 
-import { FlowContext } from "../../../context/flow-context";
+import { FlowDataContext, FlowSelectionContext } from "../../../context/flow-context";
 import NodeExpandButton from "./expand-node";
 import { colors, nodeHeight, nodeWidth } from "../../../utils/constants";
 import { Badge } from "../../badge/badge";
@@ -18,8 +18,10 @@ import { ControlContext } from "../../../context/control-context";
 const NodeCard = memo((props: NodeProps<NodeRecord>) => {
   const { id, data } = props;
   const { context, entityName, entityId, activeForm } = useContext(ControlContext);
-  const { selectedNode, moveToNode, getChildrenIds, direction } = useContext(FlowContext);
-  const { openForm } = useNavigation(context)
+  const { moveToNode, getChildrenIds } = useContext(FlowDataContext);
+  const { selectedNode, direction } = useContext(FlowSelectionContext);
+  const { openForm } = useNavigation(context);
+
   const detailRef = useRef<HTMLDivElement>(null);
 
   const cardStyle = useMemo(() => {
@@ -45,7 +47,7 @@ const NodeCard = memo((props: NodeProps<NodeRecord>) => {
     const filteredAttributes = !data.attributes || data.attributes.length < 0 
           ? []
           : Object.keys(data.attributes)
-            .filter(key => activeForm?.columns.some(c => c.logicalName == key) && key != "_ownerid_value" && key != "statecode")
+            .filter(key => activeForm?.columns.some(c => c.logicalName == key) && key != "statecode")
 
     return filteredAttributes.map((key) => (
         <div key={key} style={styles.info}>
@@ -54,9 +56,11 @@ const NodeCard = memo((props: NodeProps<NodeRecord>) => {
           </Text>
           <Text style={styles.infoValue} nowrap block>
             {
-              typeof data.attributes![key].value === "object" 
-                ? <LookupField item={data.attributes![key].value} /> 
-                : data.attributes![key].value
+              data.attributes![key] ==  "_ownerid_value" && owner ? 
+                <Badge name={owner.name} etn={owner.entityType} id={owner.id} size={PersonaSize.size32} nameStyle={styles.ownerText} isClickable/>
+                : typeof data.attributes![key].value === "object" 
+                  ? <LookupField item={data.attributes![key].value} /> 
+                  : data.attributes![key].value
             }
           </Text>
         </div>
@@ -103,10 +107,7 @@ const NodeCard = memo((props: NodeProps<NodeRecord>) => {
       <div ref={detailRef} style={styles.detailsContainer}>
         {attributes}
       </div>
-      <div style={{...styles.footerContainer, justifyContent: owner ? 'space-between': 'flex-end'}}>
-        {
-          owner && <Badge name={owner.name} etn={owner.entityType} id={owner.id} size={PersonaSize.size32} nameStyle={styles.ownerText} isClickable/>
-        }
+      <div style={{...styles.footerContainer, justifyContent: 'flex-end'}}>
         <IconButton iconProps={{ iconName: 'OpenInNewWindow' }} onClick={handleOpenRecord}/>
       </div>
       {hasChildrens && <NodeExpandButton {...props} />}      
