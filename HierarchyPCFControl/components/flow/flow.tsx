@@ -19,7 +19,7 @@ interface IProps {
 }
 
 const Flow = memo(({ initialNodes, initialEdges }: IProps) => {
-    const { context, entityName, entityId } = useContext(ControlContext);
+    const { entityName, entityId } = useContext(ControlContext);
     const { height, width } = useWindowDimensions();
     const [direction, setDirection] = useState('TB');
     const {
