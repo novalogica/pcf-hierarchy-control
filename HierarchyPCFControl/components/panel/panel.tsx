@@ -58,7 +58,7 @@ const SidePanel = memo(({ isCollapsed, setIsCollapsed, panelWidth }: { isCollaps
           style={{...styles.toolbarItem, width: 'auto'}} 
           onClick={() => {
             setDirection((prev: string) => prev == "TB" ? "LR" : "TB")
-            setTimeout(() => fitView(), 250);
+            fitView({ duration: 350, interpolate: 'smooth'});
           }}
           iconProps={{ iconName: direction == "TB" ? "HorizontalTabKey": "DistributeDown" }}
           >
