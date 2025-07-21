@@ -38,7 +38,7 @@ const extractColumns = (cardXml: string, relationship: RelationshipInfo, attribu
       logicalName: `_${relationship.ReferencingAttribute}_value`,
       displayName: relationship.ReferencingAttribute,
     },
-    ...defaultColumns(metadata._ownershipType)
+    ...defaultColumns()
   ];
 
   const primaryKeyColumn: Column = {
