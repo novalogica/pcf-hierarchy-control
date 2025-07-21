@@ -1,6 +1,6 @@
 import { createContext } from "react";
 import { IInputs } from "../generated/ManifestTypes";
-import { EntityMetadata, Form } from "../interfaces/entity";
+import { Form } from "../interfaces/entity";
 
 interface IControlContext {
     context: ComponentFramework.Context<IInputs>,
