@@ -37,24 +37,12 @@ const badgeColors = [
   PersonaInitialsColor.cyan,
 ]
 
-const defaultColumns = (type: OwnershipType): Column[] => {
-  const columns = [{
+const defaultColumns = (): Column[] => {
+  return [{
     logicalName: 'statecode',
     displayName: 'State',
     attributeType: 'Picklist'
   }];
-
-  switch(type){
-    case OwnershipType.UserOwned: {
-      return [...columns, {
-        logicalName: '_ownerid_value',
-        displayName: 'Owner',
-        attributeType: 'Owner'
-      }]
-    }
-    default: 
-      return [];
-  }
 }
 
 export {
