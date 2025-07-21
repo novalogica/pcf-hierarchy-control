@@ -6,13 +6,14 @@ import { Dropdown, IDropdownOption } from "@fluentui/react/lib/Dropdown";
 import NodeTree from "./tree";
 import { colors } from "../../utils/constants";
 import { ControlContext } from "../../context/control-context";
-import { FlowSelectionContext } from "../../context/flow-context";
+import { FlowDataContext, FlowSelectionContext } from "../../context/flow-context";
 import { useStorage } from "../../hooks/useStorage";
 import useWindowDimensions from "../../hooks/useDimensions";
 
 const SidePanel = memo(({ isCollapsed, setIsCollapsed, panelWidth }: { isCollapsed: boolean, setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>, panelWidth: number }) => {
   const { context, forms, activeForm, setActiveForm, entityName } = useContext(ControlContext);
-  const { direction, setDirection, fitView } = useContext(FlowSelectionContext);
+  const { direction, setDirection, selectedNode } = useContext(FlowSelectionContext);
+  const { moveToNode } = useContext(FlowDataContext);
   const menuIcon = useMemo(() => isCollapsed ? "OpenPaneMirrored": "OpenPane", [isCollapsed])
   const { setLastUsedView } = useStorage();
   const { height } = useWindowDimensions();
@@ -58,7 +59,7 @@ const SidePanel = memo(({ isCollapsed, setIsCollapsed, panelWidth }: { isCollaps
           style={{...styles.toolbarItem, width: 'auto'}} 
           onClick={() => {
             setDirection((prev: string) => prev == "TB" ? "LR" : "TB")
-            setTimeout(() => fitView(), 500);
+            setTimeout(() => moveToNode(selectedNode.id, 0.5), 500);
           }}
           iconProps={{ iconName: direction == "TB" ? "HorizontalTabKey": "DistributeDown" }}
           >

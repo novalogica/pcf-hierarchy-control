@@ -31,7 +31,6 @@ const Flow = memo(({ initialNodes, initialEdges }: IProps) => {
         onExpandNode,
         getChildrenIds,
         onNodesChange,
-        fitView
     } = useTree(initialNodes, initialEdges, direction);
     const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
     const panelWidth = useMemo(() => isCollapsed ? 90 : 275, [isCollapsed]);
@@ -49,9 +48,8 @@ const Flow = memo(({ initialNodes, initialEdges }: IProps) => {
         selectedPath,
         selectedNode,
         direction,
-        setDirection,
-        fitView
-    }), [selectedPath, selectedNode, direction, setDirection, fitView]);
+        setDirection
+    }), [selectedPath, selectedNode, direction, setDirection]);
 
     useEffect(() => {
         const node = nodes.find(n => n.id === entityId);

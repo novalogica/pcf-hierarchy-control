@@ -48,7 +48,7 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
 
     const selectedNode = useMemo(() => {
         return layoutedNodes?.find(n => n.id == selectedPath[selectedPath.length - 1]);
-    }, [selectedPath, layoutedNodes]);
+    }, [selectedPath, layoutedNodes, direction]);
 
     useEffect(() => {
         setTimeout(() => moveToNode(entityId, 0.5), 500)
@@ -61,7 +61,7 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
         const path = findPath(id, layoutedEdges);
         setSelectedPath(path);
         setCenter(node.position.x + (nodeWidth / 2), node.position.y + (nodeHeight / 2), { zoom: zoom ?? getZoom(), duration: 350 });
-    }, [getZoom, setCenter, layoutedNodes, layoutedEdges]);
+    }, [getZoom, setCenter, layoutedNodes, layoutedEdges, direction]);
 
     const getChildrenIds = useCallback((nodeId: string) => {
         return layoutedEdges
@@ -130,7 +130,6 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
         moveToNode,
         onExpandNode,
         getChildrenIds,
-        onNodesChange,
-        fitView
+        onNodesChange
     };
 }
