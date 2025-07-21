@@ -32,6 +32,8 @@ const Flow = memo(({ initialNodes, initialEdges }: IProps) => {
         getChildrenIds,
         onNodesChange,
     } = useTree(initialNodes, initialEdges, direction);
+    const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+    const panelWidth = useMemo(() => isCollapsed ? 90 : 275, [isCollapsed]);
 
     const dataContextValue = useMemo(() => ({
         nodes,
@@ -72,33 +74,36 @@ const Flow = memo(({ initialNodes, initialEdges }: IProps) => {
     return (
         <FlowDataContext.Provider value={dataContextValue}>
             <FlowSelectionContext.Provider value={selectionContextValue}>
-                <div style={{ width, height, display: 'flex', flexDirection: 'row' }}>
-                    <SidePanel />
-                    <ReactFlow
-                        nodes={nodeList}
-                        edges={edgeList}
-                        nodeTypes={{ card: NodeCard }}
-                        proOptions={{ hideAttribution: true }}
-                        connectionLineType={ConnectionLineType.SmoothStep}
-                        nodesDraggable={false}
-                        edgesFocusable={false}
-                        onNodesChange={onNodesChange}
-                        minZoom={0.05}
-                        fitView
-                    >
-                        { 
-                            initialNodes && initialNodes.length <= nodeLengthLimit && (
-                                <MiniMap pannable position="top-right" nodeColor={(node) => getNodeColor(node, selectedPath)} nodeBorderRadius={16} />
-                            ) 
-                        }
-                        <Controls 
-                            position="bottom-right" 
-                            showInteractive={false} 
-                            showFitView={initialNodes && initialNodes.length <= nodeLengthLimit} 
-                        />
-                        <Background gap={16} />
-                        
-                    </ReactFlow>
+                <div style={{ display: 'flex', flexDirection: 'row', height }}>
+                    <SidePanel isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} panelWidth={panelWidth} />
+                    <div style={{ width: `calc(${width} - ${panelWidth}px)`, height }}>
+                        <ReactFlow
+                            nodes={nodeList}
+                            edges={edgeList}
+                            nodeTypes={{ card: NodeCard }}
+                            proOptions={{ hideAttribution: true }}
+                            connectionLineType={ConnectionLineType.SmoothStep}
+                            nodesDraggable={false}
+                            edgesFocusable={false}
+                            onNodesChange={onNodesChange}
+                            minZoom={0.05}
+                            fitView
+                        >
+                            { 
+                                initialNodes && <MiniMap 
+                                    pannable 
+                                    position="top-right" 
+                                    nodeColor={(node) => getNodeColor(node, selectedPath)} nodeBorderRadius={16} 
+                                />
+                            }
+                            <Controls 
+                                position="bottom-right" 
+                                showInteractive={false} 
+                                showFitView={initialNodes && initialNodes.length > 0} 
+                            />
+                            <Background gap={16} />
+                        </ReactFlow>
+                    </div>
                 </div>
             </FlowSelectionContext.Provider>
         </FlowDataContext.Provider>

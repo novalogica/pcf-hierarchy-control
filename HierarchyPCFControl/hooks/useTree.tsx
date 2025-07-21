@@ -60,7 +60,7 @@ export default function useTree(initialNodes: Node[], initialEdges: Edge[], dire
             return;
         const path = findPath(id, layoutedEdges);
         setSelectedPath(path);
-        setCenter(node.position.x, node.position.y, { zoom: zoom ?? getZoom(), duration: 350 });
+        setCenter(node.position.x + (nodeWidth / 2), node.position.y + (nodeHeight / 2), { zoom: zoom ?? getZoom(), duration: 350 });
     }, [getZoom, setCenter, layoutedNodes, layoutedEdges]);
 
     const getChildrenIds = useCallback((nodeId: string) => {
