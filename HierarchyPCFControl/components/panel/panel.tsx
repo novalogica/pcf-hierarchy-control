@@ -6,16 +6,18 @@ import { Dropdown, IDropdownOption } from "@fluentui/react/lib/Dropdown";
 import NodeTree from "./tree";
 import { colors } from "../../utils/constants";
 import { ControlContext } from "../../context/control-context";
-import { FlowContext } from "../../context/flow-context";
+import { FlowSelectionContext } from "../../context/flow-context";
 import { useStorage } from "../../hooks/useStorage";
+import useWindowDimensions from "../../hooks/useDimensions";
 
 const SidePanel = memo(() => {
   const { context, forms, activeForm, setActiveForm, entityName } = useContext(ControlContext);
-  const { direction, setDirection } = useContext(FlowContext);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const { direction, setDirection } = useContext(FlowSelectionContext);
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const panelWidth = useMemo(() => isCollapsed ? 90 : 275, [isCollapsed])
   const menuIcon = useMemo(() => isCollapsed ? "OpenPaneMirrored": "OpenPane", [isCollapsed])
   const { setLastUsedView } = useStorage();
+  const { height, width } = useWindowDimensions();
   
   const onFormChanged = useCallback((_: React.FormEvent<HTMLDivElement>, item?: IDropdownOption): void => {
     if(!item)
@@ -32,10 +34,10 @@ const SidePanel = memo(() => {
   const formOptions = useMemo(() => forms.map((f) => ({ key: f.formId, text: f.label } as IDropdownOption)), [forms])
 
   return (
-    <div style={{...styles.toolbar, width: panelWidth, alignItems: isCollapsed ? 'center': 'start'}}>
+    <div style={{...styles.toolbar, width: panelWidth, height: `calc(${height} - 32px)`, alignItems: isCollapsed ? 'center': 'start'}}>
       <ActionButton 
         style={{...styles.toolbarItem, width: 'auto'}} 
-        onClick={() => setIsCollapsed(prev => !prev)}
+        onClick={() => setIsCollapsed((prev: boolean) => !prev)}
         iconProps={{ iconName: menuIcon }}
       >
         {!isCollapsed && context.resources.getString("collapse")}
@@ -57,7 +59,7 @@ const SidePanel = memo(() => {
       </div>
       <ActionButton 
         style={{...styles.toolbarItem, width: 'auto'}} 
-        onClick={() => setDirection(prev => prev == "TB" ? "LR" : "TB")}
+        onClick={() => setDirection((prev: string) => prev == "TB" ? "LR" : "TB")}
         iconProps={{ iconName: direction == "TB" ? "HorizontalTabKey": "DistributeDown" }}
       >
         {isCollapsed ? "" : context.resources.getString(direction == "TB" ? "Horizontal" : "Vertical")}
@@ -76,10 +78,10 @@ const styles: Record<string, React.CSSProperties> = {
     gap: 24,
     padding: 16,
     backgroundColor: 'white',
-    borderRadius: 8,
+    borderBottomRightRadius: 8,
+    borderTopRightRadius: 8,
     boxShadow: '0px 10px 15px -3px rgba(0,0,0,0.1)',
-    alignItems: 'center',
-    height: '100%'
+    alignItems: 'center'
   },
   toolbarItem: {
     width: '100%',
