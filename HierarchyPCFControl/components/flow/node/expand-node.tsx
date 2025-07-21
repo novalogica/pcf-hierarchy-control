@@ -4,12 +4,13 @@ import { NodeProps } from "@xyflow/react/dist/esm/types";
 import { IconButton } from "@fluentui/react/lib/Button";
 
 import { NodeRecord } from "../../../types/node";
-import { FlowContext } from "../../../context/flow-context";
+import { FlowDataContext, FlowSelectionContext } from "../../../context/flow-context";
 import { ControlContext } from "../../../context/control-context";
 
 const NodeExpandButton = memo(({ id, data }: NodeProps<NodeRecord>) => {
   const { context } = useContext(ControlContext);
-  const { onExpandNode, direction } = useContext(FlowContext);
+  const { onExpandNode } = useContext(FlowDataContext);
+  const { direction } = useContext(FlowSelectionContext);
   
   const handleExpandNode = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation(); 
