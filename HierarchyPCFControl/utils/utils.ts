@@ -3,6 +3,22 @@ import { PersonaInitialsColor } from '@fluentui/react/lib/Persona';
 
 import { colors } from './constants';
 
+export const reapplyEdgeStyle = (): void => {
+    const svgs = document.querySelectorAll('.react-flow__edges svg');
+
+    svgs.forEach(svgEl => {
+        const svg = svgEl as HTMLElement;
+        const path = svg.querySelector('path.react-flow__edge-path') as SVGPathElement | null;
+        const strokeStyle = path?.style?.stroke;
+
+        if (strokeStyle === 'rgba(65, 104, 189, 0.85)') {
+            svg.style.setProperty('z-index', '0', 'important');
+        } else {
+            svg.style.setProperty('z-index', '-1', 'important');
+        }
+    });
+};
+
 export const findPath = (nodeId: string, edges: Edge[]): string[] => {
     return edges.reduce((path, _) => {
         const edge = edges.find((e) => e.target === (path[0] || nodeId));
