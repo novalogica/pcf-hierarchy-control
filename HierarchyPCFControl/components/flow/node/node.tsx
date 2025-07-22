@@ -14,6 +14,7 @@ import { Badge } from "../../badge/badge";
 import LookupField from "../../lookup/lookup";
 import { useNavigation } from "../../../hooks/useNavigation";
 import { ControlContext } from "../../../context/control-context";
+import { motion } from "framer-motion";
 
 const NodeCard = memo((props: NodeProps<NodeRecord>) => {
   const { id, data } = props;
